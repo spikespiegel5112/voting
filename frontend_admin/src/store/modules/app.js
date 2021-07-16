@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import request from '@/utils/request';
 import { baseUrl } from '@/utils/request';
 import VueInstance from '@/main';
@@ -139,7 +138,7 @@ const app = {
         code: 'others'
       }
     ],
-    accessToken: Cookies.get('Admin-Token')
+    accessToken: ''
   },
   mutations: {
     updateDictionary(state, payload) {

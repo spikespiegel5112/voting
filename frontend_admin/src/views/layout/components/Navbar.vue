@@ -80,7 +80,7 @@ export default {
     return {
       avatarImage: !!this.$store.state.user.image
         ? this.$store.state.user.image + '-style_100x100'
-        : require('../../../img/default/defaultavatar_60_60.png')
+        : require('@/assets/img/default/defaultavatar_60_60.png')
     };
   },
   computed: {
@@ -94,8 +94,9 @@ export default {
       this.$store.dispatch('ToggleSideBar');
     },
     logout() {
+      // 为了重新实例化vue-router对象 避免bug
       this.$store.dispatch('LogOut').then(() => {
-        location.reload(); // 为了重新实例化vue-router对象 避免bug
+        location.reload();
       });
     }
   }

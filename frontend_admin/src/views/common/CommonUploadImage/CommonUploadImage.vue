@@ -12,16 +12,16 @@
         <img v-if="checkFileType(item.name||item.url)==='image'" :src="$checkOSS(item.name||item.url, '-style_100x100')"
              class="avatar"/>
         <div v-else-if="checkFileType(item.name)==='word'">
-          <img src="../../img/filetype/doc.png"/>
+          <img src="@/assets/img/filetype/doc.png"/>
         </div>
         <div v-else-if="checkFileType(item.name)==='excel'">
-          <img src="../../img/filetype/xls.png"/>
+          <img src="@/assets/img/filetype/xls.png"/>
         </div>
         <div v-else-if="checkFileType(item.name)==='pdf'">
-          <img src="../../img/filetype/pdf.png"/>
+          <img src="@/assets/img/filetype/pdf.png"/>
         </div>
         <div v-else-if="checkFileType(item.name)==='file'">
-          <img src="../../img/filetype/file.png"/>
+          <img src="@/assets/img/filetype/file.png"/>
         </div>
         <ul class="operator">
           <li :class="{disabled:disabled===true}">
