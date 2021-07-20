@@ -2,8 +2,8 @@ const Sequelize = require('sequelize')
 
 const sequelize = require('../util/database')
 
-const Users = sequelize.define(
-	'User',
+const Setting = sequelize.define(
+	'Setting',
 	{
 		id: {
 			type: Sequelize.INTEGER,
@@ -11,28 +11,24 @@ const Users = sequelize.define(
 			allowNull: true,
 			primaryKey: true,
 		},
-		userId: {
+		settingId: {
 			type: Sequelize.STRING,
 			allowNull: true,
 		},
-		loginName: {
+		name: {
+			type: Sequelize.STRING,
+			allowNull: true,
+		},
+		code: {
 			type: Sequelize.STRING,
 			allowNull: false,
 		},
-		password: {
+		type: {
 			type: Sequelize.STRING,
 			allowNull: false,
 		},
-		phone: {
-			type: Sequelize.STRING,
-			allowNull: false,
-		},
-		email: {
-			type: Sequelize.STRING,
-			allowNull: false,
-		},
-		address: {
-			type: Sequelize.STRING,
+		value: {
+			type: Sequelize.TEXT,
 			allowNull: false,
 		},
 	},
@@ -41,4 +37,4 @@ const Users = sequelize.define(
 	}
 )
 
-module.exports = Users
+module.exports = Setting

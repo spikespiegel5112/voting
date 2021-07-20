@@ -1,4 +1,4 @@
-const Dictionaries = require('../models/Dictionaries');
+const Dictionary = require('../models/DictionaryModel');
 const uuidv1 = require('uuid/v1');
 
 const getList = (req, res, next) => {
@@ -16,12 +16,12 @@ const getList = (req, res, next) => {
 			offset: req.query.limit * (queryParam.page - 1)
 		};
 	}
-	Dictionaries.findAll({
+	Dictionary.findAll({
 		where: Object.assign(where,pagination)
 	}).then(async data => {
 		res.status(200).json({
 			pagination: {
-				total: await Dictionaries.count()
+				total: await Dictionary.count()
 			},
 			data: data
 		})
@@ -41,7 +41,7 @@ const createOrUpdate = (req, res, next) => {
 
 	if (!dictionaryId || dictionaryId === '') {
 		console.log('create');
-		Dictionaries.create({
+		Dictionary.create({
 			dictionaryId: uuidv1(),
 			typeName: req.body.typeName,
 			typeCode: req.body.typeCode,
@@ -60,7 +60,7 @@ const createOrUpdate = (req, res, next) => {
 		})
 	} else {
 		console.log('update');
-		Dictionaries.findOne({
+		Dictionary.findOne({
 			where: {
 				dictionaryId: req.body.dictionaryId
 			}
@@ -92,7 +92,7 @@ const deleteItem = (req, res, next) => {
 	console.log(idBody instanceof Array);
 	if (idBody instanceof Array) {
 		idBody.forEach((item, index) => {
-			Dictionaries.findOne({
+			Dictionary.findOne({
 				where: {
 					id: item
 				}
@@ -113,7 +113,7 @@ const deleteItem = (req, res, next) => {
 			})
 		})
 	} else {
-		Dictionaries.findByPk(idBody).then(result => {
+		Dictionary.findByPk(idBody).then(result => {
 			console.log(result);
 			result.destroy().then(() => {
 				if (index + 1 === req.body.id.length) {

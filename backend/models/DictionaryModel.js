@@ -2,8 +2,8 @@ const Sequelize = require('sequelize')
 
 const sequelize = require('../util/database')
 
-const Users = sequelize.define(
-	'User',
+const Dictionary = sequelize.define(
+	'Dictionary',
 	{
 		id: {
 			type: Sequelize.INTEGER,
@@ -11,27 +11,23 @@ const Users = sequelize.define(
 			allowNull: true,
 			primaryKey: true,
 		},
-		userId: {
+		dictionaryId: {
 			type: Sequelize.STRING,
 			allowNull: true,
 		},
-		loginName: {
+		name: {
 			type: Sequelize.STRING,
 			allowNull: false,
 		},
-		password: {
+		code: {
 			type: Sequelize.STRING,
 			allowNull: false,
 		},
-		phone: {
+		typeName: {
 			type: Sequelize.STRING,
 			allowNull: false,
 		},
-		email: {
-			type: Sequelize.STRING,
-			allowNull: false,
-		},
-		address: {
+		typeCode: {
 			type: Sequelize.STRING,
 			allowNull: false,
 		},
@@ -41,4 +37,4 @@ const Users = sequelize.define(
 	}
 )
 
-module.exports = Users
+module.exports = Dictionary

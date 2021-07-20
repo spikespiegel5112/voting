@@ -1,5 +1,4 @@
 const express = require('express');
-const crawler = require('crawler');
 const uuidv1 = require('uuid/v1');
 const UserModel = require('../models/UserModel');
 

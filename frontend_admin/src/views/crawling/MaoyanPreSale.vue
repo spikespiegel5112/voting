@@ -468,23 +468,23 @@ export default {
   },
   data() {
     return {
-      getListByPaginationRequest: 'crawlerMaoyanPreSale/getListByPagination',
-      crawlAndSaveRequest: 'crawlerMaoyanPreSale/crawlAndSave',
-      crawlPreSaleDetailRequest: 'crawlerMaoyanPreSale/crawlPreSaleDetail',
+      getListByPaginationRequest: 'voting/getListByPagination',
+      crawlAndSaveRequest: 'voting/crawlAndSave',
+      crawlPreSaleDetailRequest: 'voting/crawlPreSaleDetail',
       crawlPreSaleWantToSeePortraitRequest:
-        'crawlerMaoyanPreSale/crawlPreSaleWantToSeePortrait',
+        'voting/crawlPreSaleWantToSeePortrait',
       crawlPreSaleBoxOfficePremiereRequest:
-        'crawlerMaoyanPreSale/crawlPreSaleBoxOfficePremiere',
+        'voting/crawlPreSaleBoxOfficePremiere',
       crawlPreSaleBookingDetailsRequest:
-        'crawlerMaoyanPreSale/crawlPreSaleBookingDetails',
-      deleteRecordRequest: 'crawlerMaoyanPreSale/deleteRecords',
+        'voting/crawlPreSaleBookingDetails',
+      deleteRecordRequest: 'voting/deleteRecords',
       getSettingsRequest: 'settings/getList',
 
-      crawlMovieListRequest: 'crawlerMaoyanPreSale/crawlMovieList',
+      crawlMovieListRequest: 'voting/crawlMovieList',
       saveMultipleMaoyanPreSaleRequest:
-        'crawlerMaoyanPreSale/saveMultipleMaoyanPreSale',
+        'voting/saveMultipleMaoyanPreSale',
       saveMultipleMaoyanPreSaleBookingDetailsRequest:
-        'crawlerMaoyanPreSale/saveMultipleMaoyanPreSaleBookingDetails',
+        'voting/saveMultipleMaoyanPreSaleBookingDetails',
       crawlerSettingFlag: false,
       crawlerSetting: {
         address: ''

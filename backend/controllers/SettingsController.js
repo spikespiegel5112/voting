@@ -1,4 +1,4 @@
-const SettingsModel = require('../models/SettingsModel');
+const SettingModel = require('../models/SettingModel');
 const uuidv1 = require('uuid/v1');
 
 const getList = (req, res, next) => {
@@ -21,10 +21,10 @@ const getList = (req, res, next) => {
 	}
 
 
-	SettingsModel.findAll(Object.assign(query, pagination)).then(async data => {
+	SettingModel.findAll(Object.assign(query, pagination)).then(async data => {
 		res.status(200).json({
 			pagination: {
-				total: await SettingsModel.count(),
+				total: await SettingModel.count(),
 			},
 			data: data
 		})
@@ -40,7 +40,7 @@ const createOrUpdate = (req, res, next) => {
 	let settingId = req.body.settingId;
 	console.log('settingId', req.body);
 	if (!settingId || settingId === '') {
-		SettingsModel.create({
+		SettingModel.create({
 			settingId: uuidv1(),
 			name: req.body.name,
 			type: req.body.type,
@@ -60,7 +60,7 @@ const createOrUpdate = (req, res, next) => {
 	} else {
 		console.log('settingId', settingId);
 
-		SettingsModel.findOne({
+		SettingModel.findOne({
 			where: {
 				settingId: settingId
 			}
@@ -95,7 +95,7 @@ const deleteItems = (req, res, next) => {
 	console.log(settingId instanceof Array);
 	if (settingId instanceof Array) {
 		settingId.forEach((item, index) => {
-			SettingsModel.findAll({
+			SettingModel.findAll({
 				where: {
 					settingId: item
 				}
@@ -115,7 +115,7 @@ const deleteItems = (req, res, next) => {
 			})
 		})
 	} else {
-		// SettingsModel.findAll({
+		// SettingModel.findAll({
 		// 	where: {
 		// 		settingId: settingId
 		// 	}
@@ -125,7 +125,7 @@ const deleteItems = (req, res, next) => {
 		//
 		// });
 
-		SettingsModel.destroy({
+		SettingModel.destroy({
 			where: {
 				settingId: settingId
 			}

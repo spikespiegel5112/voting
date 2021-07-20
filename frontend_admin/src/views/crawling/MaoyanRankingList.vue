@@ -756,15 +756,15 @@ export default {
         'crawlerMaoyanRankingList/crawlRankingListBoxOfficeGlobal',
 
       crawlMoviePreSaleDetailRequest:
-        'crawlerMaoyanPreSale/crawlMoviePreSaleDetail',
+        'voting/crawlMoviePreSaleDetail',
       crawlMoviePreSalePortraitRequest:
-        'crawlerMaoyanPreSale/crawlMoviePreSalePortrait',
+        'voting/crawlMoviePreSalePortrait',
       deleteRecordRequest: 'crawlerMaoyanRankingList/deleteRecords',
       getSettingsRequest: 'settings/getList',
 
       crawlRankingListByYearRequest:
         'crawlerMaoyanRankingList/crawlRankingListByYear',
-      crawlPreSaleMovieListRequest: 'crawlerMaoyanPreSale/crawlMovieList',
+      crawlPreSaleMovieListRequest: 'voting/crawlMovieList',
       saveMultipleMaoyanRankingListRecordRequest:
         'crawlerMaoyanRankingList/saveMultipleMaoyanRankingListRecord',
       crawlerSettingFlag: false,

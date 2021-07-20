@@ -8,7 +8,7 @@ const fetch = require('node-fetch');
 const atob = require('atob');
 const btoa = require('btoa');
 const request = require('request');
-const SettingsModel = require('../models/SettingsModel');
+const SettingModel = require('../models/SettingModel');
 // const woff2Parser = require('../util/woff2Parser');
 const _woff2Parser = require('woff2-parser');
 const _woffParser = require('woff-parser');
@@ -89,7 +89,7 @@ const crawlPagePromise = (req, res, next) => {
 		console.log('body+++++++++++++++', body);
 
 
-		headers = await SettingsModel.findOne({
+		headers = await SettingModel.findOne({
 			where: {
 				code: req.body.headerCode
 			}

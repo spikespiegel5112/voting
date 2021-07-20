@@ -2,8 +2,8 @@ const Sequelize = require('sequelize')
 
 const sequelize = require('../util/database')
 
-const Users = sequelize.define(
-	'User',
+const VotingItem = sequelize.define(
+	'VotingItem',
 	{
 		id: {
 			type: Sequelize.INTEGER,
@@ -11,29 +11,29 @@ const Users = sequelize.define(
 			allowNull: true,
 			primaryKey: true,
 		},
-		userId: {
+		votingId: {
+			type: Sequelize.STRING,
+			allowNull: false,
+		},
+		name: {
 			type: Sequelize.STRING,
 			allowNull: true,
 		},
-		loginName: {
+		title: {
 			type: Sequelize.STRING,
-			allowNull: false,
+			allowNull: true,
 		},
-		password: {
+		description: {
 			type: Sequelize.STRING,
-			allowNull: false,
+			allowNull: true,
 		},
-		phone: {
+		type: {
 			type: Sequelize.STRING,
-			allowNull: false,
+			allowNull: true,
 		},
-		email: {
-			type: Sequelize.STRING,
-			allowNull: false,
-		},
-		address: {
-			type: Sequelize.STRING,
-			allowNull: false,
+		value: {
+			type: Sequelize.TEXT,
+			allowNull: true,
 		},
 	},
 	{
@@ -41,4 +41,4 @@ const Users = sequelize.define(
 	}
 )
 
-module.exports = Users
+module.exports = VotingItem

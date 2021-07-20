@@ -7,12 +7,16 @@ const session = require('express-session')
 // const observe = require('object.observe');
 const sequelize = require('./util/database')
 
-const Dictionaries = require('./models/Dictionaries')
-const LogsModel = require('./models/LogsModel')
-const SettingsModel = require('./models/SettingsModel')
+const DictionaryModel = require('./models/DictionaryModel')
+const LogModel = require('./models/LogModel')
+const SettingModel = require('./models/SettingModel')
+const UserModel = require('./models/UserModel')
+const VotingModel = require('./models/VotingModel')
+const VotingItemModel = require('./models/VotingItemModel')
 
 const errorController = require('./controllers/errorController')
 const commonRoutes = require('./routers/commonRoutes')
+const votingRoutes = require('./routers/votingRoutes')
 const settingsRoutes = require('./routers/settingsRoutes')
 const dictionaryRoutes = require('./routers/dictionary')
 const userRoutes = require('./routers/userRoutes')
@@ -61,6 +65,7 @@ var corsOptions = {
 }
 
 app.use('/settings', cors(corsOptions), settingsRoutes)
+app.use('/voting', cors(corsOptions), votingRoutes)
 app.use('/dictionary', cors(corsOptions), dictionaryRoutes)
 app.use('/common', cors(corsOptions), commonRoutes)
 app.use('/user', cors(corsOptions), userRoutes)
