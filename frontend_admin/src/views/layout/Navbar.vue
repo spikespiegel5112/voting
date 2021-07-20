@@ -2,12 +2,12 @@
   <el-menu class="navbar" mode="horizontal">
     <el-row>
       <el-col :span="18">
-        <hamburger
+        <Hamburger
           class="hamburger-container"
           :toggleClick="toggleSideBar"
-          :isActive="sidebar.opened"
-        ></hamburger>
-        <breadcrumb></breadcrumb>
+          :isActive="sidebar.opened === 1"
+        />
+        <Breadcrumb />
       </el-col>
       <el-col :span="6" class="right-menu">
         <div class="common_environmenthint_item" v-if="$prodEnv">测试环境</div>

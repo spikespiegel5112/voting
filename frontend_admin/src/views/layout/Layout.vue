@@ -5,7 +5,7 @@
       class="drawer-bg"
       @click="handleClickOutside"
     ></div> -->
-    <el-aside class="aside" :width="classObj ? 180 : 50">
+    <el-aside class="aside" :width="classObj ? '180' : '50'">
       <Sidebar class="sidebar-container" />
     </el-aside>
     <el-container>
@@ -17,9 +17,9 @@
   </el-container>
 </template>
 <script>
-import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
-import AppMain from './components/AppMain';
+import Navbar from './Navbar';
+import Sidebar from './Sidebar';
+import AppMain from './AppMain';
 import ResizeMixin from './mixin/ResizeHandler';
 
 export default {

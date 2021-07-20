@@ -3,13 +3,13 @@
     <CommonQuery>
       <template slot="button1">
         <el-button
-          @click="stepCrawlFlag = true"
+          @click="handleCreate"
           icon="el-icon-plus"
           size="mini"
           type="primary"
           v-waves
         >
-          分步抓取
+          添加投票
         </el-button>
         <el-button
           @click="handleMultipleDelete"
@@ -60,134 +60,15 @@
       ></el-table-column>
       <el-table-column
         align="center"
-        label="movieId"
-        prop="movieId"
-        width="100"
+        label="投票名称"
+        prop="votingName"
       ></el-table-column>
       <el-table-column
         align="center"
-        label="电影名称（中文）"
-        prop="titleChi"
-        width="100"
+        label="是否多选"
+        prop="isMultiple"
       ></el-table-column>
-      <el-table-column
-        align="center"
-        label="电影名称（原文）"
-        prop="title"
-        width="100"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="抓取时间"
-        prop="timestamp"
-        width="100"
-      >
-        <template slot-scope="scope">
-          {{
-            $moment(Number(scope.row.timestamp)).format('YYYY-MM-DD HH:mm:ss')
-          }}
-        </template>
-      </el-table-column>
-      <el-table-column
-        align="center"
-        label="上映时间"
-        prop="releaseDate"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="平台名称（英文）"
-        prop="platformEngName"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="平台名称（中文）"
-        prop="platformChineseName"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="平台类型"
-        prop="platformType"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="想看数量"
-        prop="numWantToSee"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="想看男性受众占比"
-        prop="wantToSeeByGenderMale"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="想看女性受众占比"
-        prop="wantToSeeByGenderFemale"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="想看20岁以下占比"
-        prop="wantToSeeByAge20"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="想看20到24岁占比"
-        prop="wantToSeeByAge20To24"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="想看25到29岁占比"
-        prop="wantToSeeByAge25To29"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="想看30到34岁占比"
-        prop="wantToSeeByAge30To34"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="想看35到39岁占比"
-        prop="wantToSeeByAge35To39"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="想看40岁以上占比"
-        prop="wantToSeeByAge40"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="想看一线城市占比"
-        prop="wantToSeeByTier1"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="想看二线城市占比"
-        prop="wantToSeeByTier2"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="想看三线城市占比"
-        prop="wantToSeeByTier3"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="想看四线城市占比"
-        prop="wantToSeeByTier4"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="预售票房"
-        prop="premiereBoxInfo"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="预售排片占比"
-        prop="premiereShowRate"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="预售排片场次"
-        prop="premiereShowRate"
-      ></el-table-column>
+
       <el-table-column align="center" fixed="right" label="操作" width="70px">
         <template slot-scope="scope">
           <el-button @click="handleDelete(scope)" size="mini" type="danger"
@@ -211,284 +92,51 @@
       </el-pagination>
     </div>
     <!-- 编辑 -->
+    <!-- 123 -->
     <el-dialog
       :title="textMap[dialogStatus]"
-      :visible.sync="oneKeyCrawlFlag"
-      width="850px"
+      :visible.sync="editDialogFlag"
+      top="10vh"
     >
-      <el-row justify="center" type="flex">
-        <el-col :span="20">
-          <el-form
-            :model="formData"
-            :rules="rules"
-            label-position="right"
-            label-width="140px"
-            ref="formData"
+      <el-form
+        ref="formData"
+        :model="formData"
+        :rules="rules"
+        label-position="right"
+        label-width="80px"
+      >
+        <el-form-item label="投票名称">
+          <el-input v-model="formData.name"></el-input>
+        </el-form-item>
+        <el-form-item label="是否多选">
+          <el-switch
+            v-model="formData.isMultiple"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
           >
-            <el-form-item label="爬虫类型" prop="rewardType">
-              <el-select
-                @change="chooseRewardType"
-                placeholder=""
-                v-model="formData.rewardType"
-              >
-                <el-option
-                  :key="item.code"
-                  :label="item.name"
-                  :value="item.value"
-                  v-for="item in settingsList"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="爬虫地址" prop="crawlerAddress">
-              <el-input v-model="formData.crawlerAddress"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-      <div class="dialog-footer" slot="footer">
-        <el-button @click="oneKeyCrawlFlag = false" v-waves>{{
-          $t('table.cancel')
-        }}</el-button>
-        <el-button @click="crawlerData" type="primary" v-waves>{{
-          $t('table.confirm')
-        }}</el-button>
+          </el-switch>
+        </el-form-item>
+      </el-form>
+      <div class="footer alginright">
+        <el-button type="primary" @click="submitCreate">保存</el-button>
+        <el-button @click="editDialogFlag = false">取消</el-button>
       </div>
-    </el-dialog>
-
-    <el-dialog
-      :title="textMap[dialogStatus]"
-      :visible.sync="stepCrawlFlag"
-      top="1vh"
-      width="1600px"
-    >
-      <el-row :gutter="1">
-        <el-col :span="4">
-          <el-button @click="prepareToCrawlFlag = true" type="primary">
-            {{ preSaleListData.length === 0 ? '获取索引' : '重新获取索引' }}
-          </el-button>
-          <el-button
-            :disabled="preSaleListData.length === 0"
-            @click="beginToCrawPreSaleListMovieData"
-            type="primary"
-            v-if="!crawlingFlag"
-          >
-            {{ crawlingCount === 0 ? '开始抓取' : '重新抓取' }}
-          </el-button>
-          <el-button @click="stopCrawling" type="danger" v-else
-            >停止抓取</el-button
-          >
-        </el-col>
-
-        <el-col :span="20" style="text-align: right">
-          <el-button @click="save" type="primary">保存</el-button>
-        </el-col>
-      </el-row>
-      <el-divider></el-divider>
-      <el-row>
-        <el-col :span="24">
-          <el-row justify="left" type="flex">
-            <el-col :span="5">
-              <!--          {{preSaleListCountLimit}}-->
-              <el-input-number
-                :min="0"
-                v-model="preSaleListCountLimit"
-              ></el-input-number>
-              <el-button @click="handleChangeCounter" type="primary"
-                >确定</el-button
-              >
-            </el-col>
-            <el-col :span="19">
-              <el-progress
-                :percentage="
-                  preSaleListData.length !== 0
-                    ? Math.floor(
-                        (crawlingCount /
-                          preSaleListData.filter(item => item.active).length) *
-                          100
-                      )
-                    : 0
-                "
-                :stroke-width="20"
-                :text-inside="true"
-                status="success"
-              ></el-progress>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24">
-              <el-card shadow="never">
-                <el-divider>
-                  <el-row>
-                    <el-col
-                      :span="24"
-                      v-if="
-                        preSaleListData.length > 0 &&
-                          crawlingCount < preSaleListData.length
-                      "
-                    >
-                      共有{{ preSaleListData.length }}条数据，正在抓取第{{
-                        crawlingCount
-                      }}条...
-                    </el-col>
-                    <el-col :span="24" v-else>
-                      共有{{ preSaleListData.length }}条数据，抓取完毕
-                    </el-col>
-                  </el-row>
-                </el-divider>
-                <el-row justify="left" type="flex">
-                  <el-col :span="24">
-                    <!--          {{preSaleListData}}-->
-                    <el-timeline :style="crawlerStyle">
-                      <el-timeline-item
-                        :color="
-                          item.color === 'success' ? '#91d929' : '#e4e7ed'
-                        "
-                        :key="index"
-                        :timestamp="item.recordTime"
-                        class="timelineitem"
-                        placement="top"
-                        v-for="(item, index) in preSaleListData.filter(
-                          item => item.active
-                        )"
-                      >
-                        <el-card shadow="hover">
-                          <el-row>
-                            <el-col :span="1" style="text-align: left"
-                              >第{{ index + 1 }}条
-                            </el-col>
-                            <!--                            <el-col :span="1" style="text-align: left">{{item.movieId}}</el-col>-->
-                            <el-col :span="4" style="text-align: left"
-                              >{{ item.title }}
-                            </el-col>
-                            <el-col :span="2">
-                              详情:
-                              <i class="" v-if="item.detailSuccess === 0"></i>
-                              <i
-                                class="el-icon-check success"
-                                v-else-if="item.detailSuccess === 1"
-                              ></i>
-                              <i
-                                class="el-icon-close failed"
-                                v-else="item.detailSuccess === 2"
-                              ></i>
-                            </el-col>
-                            <el-col :span="2">
-                              想看画像:
-                              <i class="" v-if="item.portraitSuccess === 0"></i>
-                              <i
-                                class="el-icon-check success"
-                                v-else-if="item.portraitSuccess === 1"
-                              ></i>
-                              <i
-                                class="el-icon-close failed"
-                                v-else="item.portraitSuccess === 2"
-                              ></i>
-                            </el-col>
-
-                            <el-col :span="2">
-                              预售票房:
-                              <i class="" v-if="item.premiereSuccess === 0"></i>
-                              <i
-                                class="el-icon-check success"
-                                v-else-if="item.premiereSuccess === 1"
-                              ></i>
-                              <i
-                                class="el-icon-close failed"
-                                v-else="item.premiereSuccess === 2"
-                              ></i>
-                            </el-col>
-                            <el-col :span="2">
-                              预售票房明细:
-                              <i
-                                class=""
-                                v-if="item.bookingDetailsSuccess === 0"
-                              ></i>
-                              <i
-                                class="el-icon-check success"
-                                v-else-if="item.bookingDetailsSuccess === 1"
-                              ></i>
-                              <i
-                                class="el-icon-close failed"
-                                v-else="item.premiereSuccess === 2"
-                              ></i>
-                            </el-col>
-                          </el-row>
-                        </el-card>
-                      </el-timeline-item>
-                    </el-timeline>
-                  </el-col>
-                </el-row>
-              </el-card>
-            </el-col>
-          </el-row>
-        </el-col>
-      </el-row>
-      <el-row justify="space-between" type="flex">
-        <el-col :span="21"> </el-col>
-        <el-col :span="3" style="text-align: right">
-          <el-button @click="stepCrawlFlag = false" type="primary"
-            >关闭</el-button
-          >
-        </el-col>
-      </el-row>
-    </el-dialog>
-
-    <el-dialog
-      :visible.sync="prepareToCrawlFlag"
-      title="准备爬取"
-      width="600px"
-    >
-      <el-radio-group
-        @change="handleChangeLimitType"
-        v-model="crawlerCountType"
-      >
-        <el-radio :label="0">全部</el-radio>
-        <el-radio :label="1">部分</el-radio>
-        <el-input-number
-          :disabled="crawlerCountType === 0"
-          :min="0"
-          @change="handleChangeCountLimit"
-          v-model="preSaleListCountLimit"
-        ></el-input-number>
-      </el-radio-group>
-
-      <el-button @click="getAllCrawlingIndex" type="primary"
-        >开始抓取列表</el-button
-      >
     </el-dialog>
   </el-row>
 </template>
 
 <script>
-import CommonQuery from '@/views/common/CommonQuery.vue';
-
 export default {
-  components: {
-    CommonQuery
-  },
   data() {
     return {
       getListByPaginationRequest: 'voting/getListByPagination',
-      crawlAndSaveRequest: 'voting/crawlAndSave',
-      crawlPreSaleDetailRequest: 'voting/crawlPreSaleDetail',
-      crawlPreSaleWantToSeePortraitRequest:
-        'voting/crawlPreSaleWantToSeePortrait',
-      crawlPreSaleBoxOfficePremiereRequest:
-        'voting/crawlPreSaleBoxOfficePremiere',
-      crawlPreSaleBookingDetailsRequest:
-        'voting/crawlPreSaleBookingDetails',
-      deleteRecordRequest: 'voting/deleteRecords',
-      getSettingsRequest: 'settings/getList',
+      createOrUpdateRequest: 'voting/createOrUpdate',
 
-      crawlMovieListRequest: 'voting/crawlMovieList',
-      saveMultipleMaoyanPreSaleRequest:
-        'voting/saveMultipleMaoyanPreSale',
-      saveMultipleMaoyanPreSaleBookingDetailsRequest:
-        'voting/saveMultipleMaoyanPreSaleBookingDetails',
       crawlerSettingFlag: false,
       crawlerSetting: {
         address: ''
       },
+      editDialogFlag: false,
       chosenReward: '',
       chooseRewardTypeModel: {},
       chosenThirdPartyProductInfo: {},
@@ -498,43 +146,12 @@ export default {
       dailyLimitMode: '',
       limitMode: '',
       tableKey: 0,
-      tableData: [
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        },
-        {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-      ],
+
       tableList: [],
       total: null,
       listLoading: true,
       availabilityFlag: false,
 
-      statusDictionary: [
-        {
-          code: 0,
-          name: '未上线'
-        },
-        {
-          code: 1,
-          name: '上线'
-        }
-      ],
       queryModel: {
         sort: 'desc',
         brandName: ''
@@ -543,8 +160,6 @@ export default {
         page: 1,
         limit: 100
       },
-      importanceOptions: [1, 2, 3],
-
       sortOptions: [
         { label: 'ID Ascending', key: '+id' },
         { label: 'ID Descending', key: '-id' }
@@ -562,41 +177,16 @@ export default {
         create: 'Create'
       },
       dialogPvVisible: false,
-      rules: {
-        id: [{ required: true, message: '此项为必填项', trigger: 'change' }],
-        description: [
-          { required: true, message: '此项为必填项', trigger: 'change' }
-        ],
-        name: [{ required: true, message: '此项为必填项', trigger: 'change' }],
-        dailyLimit: [
-          { required: true, message: '此项为必填项', trigger: 'change' }
-        ],
-        limit: [{ required: true, message: '此项为必填项', trigger: 'change' }],
-        startDate: [
-          { required: true, message: '此项为必填项', trigger: 'change' }
-        ],
-        endDate: [
-          { required: true, message: '此项为必填项', trigger: 'change' }
-        ],
-        status: [{ required: true, message: '此项为必填项', trigger: 'change' }]
+      formData: {
+        name: '',
+        isMultiple: false
       },
-      fileList: [],
-      searchTxt: '',
-      expandQuery: '',
-      crawlerCountType: 0,
-      currentAdvertisementTabIndex: 0,
-      effectiveDuration: [],
-      multipleSelection: [],
-      oneKeyCrawlFlag: false,
-      stepCrawlFlag: false,
-      prepareToCrawlFlag: false,
-      settingsList: [],
-      preSaleData: [],
-      crawlingCount: 0,
-      preSaleListData: [],
-      bookingDetailsData: [],
-      crawlingFlag: false,
-      preSaleListCountLimit: 0
+      rules: {
+        name: [{ required: true, message: '此项为必填项', trigger: 'change' }],
+        isMultiple: [
+          { required: true, message: '此项为必填项', trigger: 'change' }
+        ]
+      }
     };
   },
   computed: {
@@ -605,12 +195,6 @@ export default {
     },
     dictionaryList() {
       return this.$store.state.app.dictionary.crawlerAddress;
-    },
-    crawlerStyle() {
-      return {
-        height: this.tableHeight - 180 + 'px',
-        overflow: 'auto'
-      };
     }
   },
   watch: {
@@ -1194,7 +778,7 @@ export default {
         Promise.all([promise1, promise2])
           .then(responseAll => {
             this.getTableData();
-            this.stepCrawlFlag = false;
+            this.editDialogFlag = false;
             this.$message.success('数据提交成功');
           })
           .catch(error => {
@@ -1222,39 +806,30 @@ export default {
         );
       });
       console.log('this.preSaleListData+++', this.preSaleListData);
+    },
+    handleCreate() {
+      this.editDialogFlag = true;
+      this.dialogStatus = 'create';
+    },
+    submitCreate() {
+      this.$refs.formData
+        .validate()
+        .then(valid => {
+          console.log(valid);
+          this.$http
+            .post(this.createOrUpdateRequest, this.formData)
+            .then(response => {
+              console.log(response);
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   }
 };
 </script>
-<style lang="scss">
-@import '../../style/edifice.scss';
-
-.timelineitem {
-  font-size: 15px;
-  padding: 0 0 1px 0;
-
-  i {
-    &.success {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      text-align: center;
-      line-height: 20px;
-      border-radius: 50%;
-      color: #fff;
-      background: #91d929;
-    }
-
-    &.failed {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      text-align: center;
-      line-height: 20px;
-      border-radius: 50%;
-      color: #fff;
-      background: red;
-    }
-  }
-}
-</style>
+<style lang="scss"></style>

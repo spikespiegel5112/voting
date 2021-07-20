@@ -79,7 +79,9 @@ export default {
   props: {
     routes: {
       type: Array,
-      default: [],
+      default: () => {
+        return [];
+      },
       required: false
     },
     isNest: {
@@ -98,16 +100,16 @@ export default {
   },
   mounted() {
     let result = [];
-    this.$router.options.routes.forEach((item, index) => {
-      this.$set(result, index, item);
-    });
+    // this.$router.options.routes.forEach((item, index) => {
+    //   this.$set(result, index, item);
+    // });
     this.routeData = result;
   },
   computed: {
     ...mapGetters(['sidebar']),
-    routes() {
-      return this.$router.options.routes;
-    },
+    // routes() {
+    //   return this.$router.options.routes;
+    // },
     isCollapse() {
       return !this.sidebar.opened;
     }

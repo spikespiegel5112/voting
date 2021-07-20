@@ -50,6 +50,7 @@ export const constantRouterMap = [
     component: Layout,
     name: 'Voting',
     hidden: false,
+    meta: { title: '投票管理', icon: 'iconfont icon-mail' },
     children: [
       {
         path: 'VotingManagement',
