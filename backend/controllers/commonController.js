@@ -46,7 +46,7 @@ const crawlPagePromise = (req, res, next) => {
 			callback: function (error, result, done) {
 				if (error) {
 					console.log('creating error: ', error);
-					res.status(400).json({
+					res.status(500).json({
 						message: error.toString()
 					});
 					// done()
@@ -159,8 +159,8 @@ const woffParser = (req, res, next) => {
 			data: result
 		});
 	}).catch(error => {
-		res.status(400).json({
-			error: error,
+		res.status(500).json({
+			error,
 			data: buffer,
 		});
 	});
@@ -227,8 +227,8 @@ const getFontFile = (req, res, next) => {
 			body: url
 		});
 		// }).catch(error=>{
-		// 	res.status(400).json({
-		// 		error: error
+		// 	res.status(500).json({
+		// 		error
 		// 	})
 	});
 
@@ -237,8 +237,8 @@ const getFontFile = (req, res, next) => {
 	// 		body: url
 	// 	})
 	// }).catch(error => {
-	// 	res.status(400).json({
-	// 		error: error
+	// 	res.status(500).json({
+	// 		error
 	// 	})
 	// })
 };
@@ -321,8 +321,8 @@ const getFontDataByBase64 = (req, res, next) => {
 			data: response
 		});
 	}).then(error => {
-		res.status(400).json({
-			error: error
+		res.status(500).json({
+			error
 		});
 	});
 };
@@ -338,13 +338,13 @@ const getFontDataFromPage = async (req, res, next) => {
 				data: response
 			});
 		}).catch(error => {
-			res.status(400).json({
-				error: error
+			res.status(500).json({
+				error
 			});
 		});
 	} catch (error) {
-		res.status(400).json({
-			error: error
+		res.status(500).json({
+			error
 		});
 	}
 };
@@ -358,8 +358,8 @@ const getFontDictionaryFromPage = async (req, res, next) => {
 			data: fontDictionaryData
 		});
 	} catch (error) {
-		res.status(400).json({
-			error: error
+		res.status(500).json({
+			error
 		});
 	}
 };
@@ -399,8 +399,8 @@ const getDecodeFontValue = async (req, res, next) => {
 			data: response
 		});
 	}).catch(error => {
-		res.status(400).json({
-			error: error
+		res.status(500).json({
+			error
 		});
 	});
 };
@@ -410,7 +410,7 @@ const generateFontDictionary = (req, res, next) => {
 	_generateFontDictionaryPromise(fontData).then(response => {
 		res.status(200).json(response);
 	}).catch(error => {
-		res.status(400).json({
+		res.status(500).json({
 			message: error.toString()
 		});
 	});
@@ -541,7 +541,7 @@ const _parseUnicodeValue = (data, base64) => {
 
 		// res.status(200).json({
 		// 	raw: data,
-		// 	// data: data.trim('').split('&#x').filter((item, index) => index > 0)
+		// 	// data.trim('').split('&#x').filter((item, index) => index > 0)
 		// 	data: base64
 		// });
 
@@ -598,8 +598,8 @@ const parseDecimal = (res, req, next) => {
 			data: response
 		});
 	}).catch(error => {
-		res.status(400).json({
-			error: error
+		res.status(500).json({
+			error
 		});
 	});
 };
@@ -642,7 +642,7 @@ const exportCSV = (req, res) => {
 
 	// fastCsv.writeToStream(process.stdout, rows);
 	// fastCsv.writeToPath(path.resolve(__dirname, 'tmp.csv'), rows).on('error', err => {
-	// res.status(400).json({
+	// res.status(500).json({
 	//   error: err
 	// });
 	// }).on('finish', () => {
@@ -667,8 +667,8 @@ const exportCSV = (req, res) => {
 		fs.writeFile('aaa' + '.csv', data);
 		// res.status(200).sendFIle('aaa', options)
 	}).catch(error => {
-		res.status(400).json({
-			error: error
+		res.status(500).json({
+			error
 		});
 
 	});
@@ -702,7 +702,7 @@ const getBase64Data = async (req, res, next) => {
 			data: response
 		});
 	}).catch(error => {
-		res.status(400).json({
+		res.status(500).json({
 			error2: error
 		});
 	});

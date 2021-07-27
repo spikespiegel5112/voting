@@ -1,7 +1,6 @@
 <template>
   <el-menu
-    mode="vertical"
-    :show-timeout="200"
+    class="el-menu-vertical-demo"
     :default-active="$route.path"
     :collapse="isCollapse"
     background-color="#304156"
@@ -45,7 +44,10 @@
                 class="icon"
                 :class="item.meta.icon"
               ></span>
-              <label v-if="item.meta && item.meta.title" slot="title">
+              <label
+                v-if="item.meta && item.meta.title && !isCollapse"
+                slot="title"
+              >
                 {{ item.meta.title }}
               </label>
             </template>
@@ -115,7 +117,8 @@ export default {
     }
   },
   watch: {
-    isCollapse() {
+    isCollapse(value) {
+      //   debugger;
       let result = [];
       this.$router.options.routes.forEach((item, index) => {
         this.$set(result, index, item);
@@ -140,9 +143,7 @@ export default {
           if (result[result.length - 1].children) {
             result[result.length - 1].children = result[
               result.length - 1
-            ].children.filter(
-              item2 => item2.hidden === undefined || !item2.hidden
-            );
+            ].children.filter(item2 => !item2.hidden);
           }
         }
       });
@@ -166,65 +167,14 @@ export default {
 .menu_wrapper {
   height: 100%;
 }
-.sidebar-container {
-  display: inline-block;
-  width: 180px;
-  transition: width 0.28s;
-  height: 100%;
-  font-size: 0px;
-  z-index: 1001;
-  overflow: hidden;
-  //reset element-ui css
-  .horizontal-collapse-transition {
-    transition: 0s width ease-in-out, 0s padding-left ease-in-out,
-      0s padding-right ease-in-out;
-  }
-  .scrollbar-wrapper {
-    padding: 0;
-    overflow: auto;
-    height: 100%;
-    .el-scrollbar__view {
-      height: 100%;
-    }
-  }
-  .is-horizontal {
-    display: none;
-  }
-  a {
-    display: inline-block;
-    width: 100%;
-    overflow: hidden;
-  }
-  .el-menu {
-    border: none;
-    height: 100%;
-    width: 100%;
-  }
+// .el-menu-vertical-demo:not(.el-menu--collapse) {
+//   width: 240px;
+// }
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 200px;
 }
-.hideSidebar {
-  .sidebar-container {
-    width: 60px !important;
-  }
-  .submenu-title-noDropdown {
-    position: relative;
-  }
-  .el-submenu {
-    overflow: hidden;
-    & > .el-submenu__title {
-      .el-submenu__icon-arrow {
-        display: none;
-      }
-    }
-  }
-  .el-menu--collapse {
-    .el-submenu {
-      & > .el-submenu__title {
-        & > label {
-          display: none;
-        }
-      }
-    }
-  }
+.sidebar-container {
+  height: 100%;
 }
 .el-menu {
   label {
@@ -245,27 +195,27 @@ export default {
 }
 .sidebar-container .nest-menu .el-submenu > .el-submenu__title,
 .sidebar-container .el-submenu .el-menu-item {
-  min-width: 180px !important;
+  //   min-width: 180px !important;
   background-color: $subMenuBg !important;
   &:hover {
     background-color: $menuHover !important;
   }
 }
 .el-menu--collapse .el-menu .el-submenu {
-  min-width: 180px !important;
+  //   min-width: 180px !important;
 }
 
 /* 适配移动端 */
 .mobile {
-  .sidebar-container {
-    transition: transform 0.28s;
-    width: 180px !important;
-  }
-  &.hideSidebar {
-    .sidebar-container {
-      transition-duration: 0.3s;
-      transform: translate3d(-180px, 0, 0);
-    }
-  }
+  //   .sidebar-container {
+  //     transition: transform 0.28s;
+  //     width: 180px !important;
+  //   }
+  //   &.hideSidebar {
+  //     .sidebar-container {
+  //       transition-duration: 0.3s;
+  //       transform: translate3d(-180px, 0, 0);
+  //     }
+  //   }
 }
 </style>

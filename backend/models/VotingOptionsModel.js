@@ -2,12 +2,11 @@ const Sequelize = require('sequelize');
 
 const sequelize = require('../util/database');
 
-const VotingItem = sequelize.define(
-  'VotingItem',
+const VotingOptions = sequelize.define(
+  'VotingOptions',
   {
     id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
+      type: Sequelize.STRING,
       allowNull: true,
       primaryKey: true
     },
@@ -15,7 +14,7 @@ const VotingItem = sequelize.define(
       type: Sequelize.STRING,
       allowNull: false
     },
-    name: {
+    content: {
       type: Sequelize.STRING,
       allowNull: true
     },
@@ -41,4 +40,4 @@ const VotingItem = sequelize.define(
   }
 );
 
-module.exports = VotingItem;
+module.exports = VotingOptions;

@@ -2,7 +2,7 @@
   <div>
     <el-breadcrumb class="app-breadcrumb" separator="/">
       <transition-group name="breadcrumb">
-        <el-breadcrumb-item v-for="(item, index) in levelList" :key="index">
+        <el-breadcrumb-item v-for="(item, index) in levelList" :key="'path' + index">
           <span v-if="item.redirect === 'noredirect' || index === levelList.length - 1" class="no-redirect">{{ item.meta.title }}</span>
           <RouterLink v-else :to="item.redirect || item.path">{{ item.meta.title }}</RouterLink>
         </el-breadcrumb-item>

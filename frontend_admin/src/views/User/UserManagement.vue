@@ -9,7 +9,7 @@
           type="primary"
           v-waves
         >
-          添加投票
+          添加用户
         </el-button>
         <el-button
           @click="handleMultipleDelete"
@@ -37,7 +37,7 @@
       </template>
     </CommonQuery>
     <el-table
-      :data="tableList"
+      :data="tableDAta"
       :height="tableHeight"
       @selection-change="handleSelectionChange"
       border
@@ -60,28 +60,33 @@
       ></el-table-column>
       <el-table-column
         align="center"
-        label="投票名称"
-        prop="title"
+        label="用户名称"
+        prop="loginName"
       ></el-table-column>
-      <el-table-column align="center" label="是否多选" prop="isMultiple">
-        <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.isMultiple"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-            disabled
-          >
-          </el-switch>
-        </template>
-      </el-table-column>
-
+      <el-table-column
+        align="center"
+        label="角色"
+        prop="role"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="地址"
+        prop="address"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="电话号码"
+        prop="phone"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="E-mail"
+        prop="email"
+      ></el-table-column>
       <el-table-column align="center" fixed="right" label="操作" width="300">
         <template slot-scope="scope">
           <el-button @click="handleUpdate(scope)" size="mini" type="primary">
             编辑
-          </el-button>
-          <el-button @click="handleVote(scope)" size="mini" type="primary">
-            投票
           </el-button>
           <el-button @click="handleDelete(scope)" size="mini" type="danger">
             删除
@@ -120,56 +125,56 @@
         :style="dialogHeight"
         class="dialog_wrapper"
       >
-        <el-form-item label="投票名称" prop="title">
-          <el-input v-model="formData.title"></el-input>
-        </el-form-item>
-        <el-form-item label="是否多选" prop="isMultiple">
-          <el-switch
-            v-model="formData.isMultiple"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          >
-          </el-switch>
-        </el-form-item>
         <el-row>
-          <el-col class="addselection alignright" :span="24">
-            <el-button
-              type="success"
-              icon="el-icon-plus"
-              size="mini"
-              @click="handleAddOption"
-            >
-              添加
-            </el-button>
+          <el-col :span="24">
+            <el-form-item label="用户名称" prop="loginName">
+              <el-input v-model="formData.loginName"></el-input>
+            </el-form-item>
           </el-col>
         </el-row>
-        <WhiteSpace />
-
-        <div v-if="formData.optionList.length > 0">
-          <el-form-item
-            v-for="(item, index) in formData.optionList"
-            :key="index"
-            :label="'选项' + (index + 1)"
-            prop="isMultiple"
-          >
-            <el-input v-model="item.title">
-              <template>
-                <el-button
-                  v-if="formData.optionList.length > 0"
-                  type="success"
-                  icon="el-icon-delete"
-                  size="mini"
-                  slot="append"
-                  @click="handleDeleteOption(item, index)"
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="登录密码" prop="password">
+              <el-input v-model="formData.password"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="角色" prop="role">
+              <el-select v-model="formData.role">
+                <el-option
+                  v-for="(item, index) in roleList"
+                  :key="index"
+                  :value="item.code"
                 >
-                </el-button>
-              </template>
-            </el-input>
-          </el-form-item>
-        </div>
-        <div v-else>
-          <el-empty image-size="100"></el-empty>
-        </div>
+                  {{ item.name }}
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="地址" prop="address">
+              <el-input v-model="formData.address"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="电话号码" prop="phone">
+              <el-input v-model="formData.phone"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="E-mail" prop="email">
+              <el-input v-model="formData.email"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <whiteSpace size="xl" />
       <div class="footer alignright">
@@ -182,25 +187,6 @@
         <el-button @click="dialogFormVisible = false">取消</el-button>
       </div>
     </el-dialog>
-    <!-- 投票 -->
-    <!-- 456 -->
-    <el-dialog
-      title="投票"
-      :visible.sync="voteDialogVisible"
-      top="5vh"
-      :close-on-click-modal="false"
-    >
-      <el-checkbox-group v-model="currentVotingFormdata">
-        <el-checkbox
-          v-for="(item, index) in currentVotingFormdata"
-          :key="index"
-          :label="item.title"
-        ></el-checkbox>
-      </el-checkbox-group>
-      <div class="footer alignright">
-        <el-button @click="voteDialogVisible = false">关闭</el-button>
-      </div>
-    </el-dialog>
   </el-row>
 </template>
 
@@ -208,10 +194,10 @@
 export default {
   data() {
     return {
-      getListByPaginationRequest: 'voting/getListByPagination',
-      createOrUpdateRequest: 'voting/createOrUpdate',
-      deleteItemsRequest: 'voting/deleteItems',
-      getVotingOptionsRequest: 'voting/getVotingOptions',
+      getListByPaginationRequest: 'user/getListByPagination',
+      getRoleListRequest: 'role/getList',
+      createOrUpdateRequest: 'user/createOrUpdate',
+      deleteItemsRequest: 'user/deleteItems',
       crawlerSettingFlag: false,
       crawlerSetting: {
         address: ''
@@ -228,7 +214,7 @@ export default {
       limitMode: '',
       tableKey: 0,
 
-      tableList: [],
+      tableDAta: [],
       total: null,
       listLoading: true,
       availabilityFlag: false,
@@ -244,12 +230,7 @@ export default {
         { label: 'ID Ascending', key: '+id' },
         { label: 'ID Descending', key: '-id' }
       ],
-      statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
-      formData: {
-        rewardType: '',
-        crawlerAddress: ''
-      },
       currentVotingFormdata: [],
       dialogFormVisible: false,
       dialogStatus: '',
@@ -259,16 +240,20 @@ export default {
       },
       dialogPvVisible: false,
       submitingFlag: false,
+      roleList: [],
       formData: {
-        name: '',
-        isMultiple: false,
-        optionList: []
+        loginName: '',
+        password: '',
+        role: ''
       },
       rules: {
-        title: [{ required: true, message: '此项为必填项', trigger: 'change' }],
-        isMultiple: [
+        loginName: [
           { required: true, message: '此项为必填项', trigger: 'change' }
-        ]
+        ],
+        password: [
+          { required: true, message: '此项为必填项', trigger: 'change' }
+        ],
+        role: [{ required: true, message: '此项为必填项', trigger: 'change' }]
       }
     };
   },
@@ -285,19 +270,7 @@ export default {
       };
     }
   },
-  watch: {
-    effectiveDuration(value) {
-      console.log(value);
-      if (value === null) {
-        value = [];
-      }
-      this.formData.startDate = this.$moment(value[0]).format('YYYY-MM-DD');
-      this.formData.endDate = this.$moment(value[1]).format('YYYY-MM-DD');
-    },
-    currentAdvertisementTabIndex(value) {
-      console.log(value);
-    }
-  },
+  watch: {},
   async mounted() {
     this.getTableData();
   },
@@ -311,9 +284,21 @@ export default {
         })
         .then(response => {
           console.log('getListByPaginationRequest', response);
-          this.tableList = response.data;
+          this.tableDAta = response.data;
           this.total = response.pagination.total;
           this.listLoading = false;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    getRoleList() {
+      this.$http
+        .get(this.$baseUrl + this.getRoleListRequest)
+        .then(response => {
+          console.log(response);
+          response = response.data;
+          this.roleList = response;
         })
         .catch(error => {
           console.log(error);
@@ -345,9 +330,7 @@ export default {
           this.submitingFlag = true;
 
           this.$http
-            .post(this.$baseUrl + this.createOrUpdateRequest, {
-              ...this.formData
-            })
+            .post(this.$baseUrl + this.createOrUpdateRequest, this.formData)
             .then(response => {
               console.log(response);
               this.submitingFlag = false;
@@ -358,17 +341,12 @@ export default {
             .catch(error => {
               console.log(error);
               this.submitingFlag = false;
-              this.$message.error('提交失败');
+              this.$message.error(error.data.message || '提交失败');
             });
         })
         .catch(error => {
           console.log(error);
         });
-    },
-    handleVote(scope) {
-      this.voteDialogVisible = true;
-      this.getVotingOptions(scope);
-      this.currentVotingFormdata = this.formData.optionList;
     },
     handleUpdate(scope) {
       console.log(scope);
@@ -379,28 +357,12 @@ export default {
       this.dialogStatus = 'update';
       this.dialogFormVisible = true;
       this.formData.id = scope.row.id;
-      this.getVotingOptions(scope);
+      this.getRoleList();
       this.$nextTick(() => {
         this.$refs['formData'].clearValidate();
       });
     },
-    getVotingOptions(scope) {
-      this.$http
-        .get(this.$baseUrl + this.getVotingOptionsRequest, {
-          params: {
-            votingId: scope.row.id
-          }
-        })
-        .then(response => {
-          console.log('getVotingOptions++++++', response);
-          response = response.data;
-          this.formData.optionList = response;
-          console.log('getVotingOptions++++++', this.formData.optionList);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
+
     handleSelectionChange(val) {
       this.multipleSelection = val;
       console.log(val);
@@ -474,93 +436,12 @@ export default {
     search() {
       this.getTableData();
     },
-    reset() {
-      this.queryModel.available = true;
-    },
-
-    uploadSuccess1(response) {
-      console.log(response);
-      this.formData.icon = response.url;
-    },
-    uploadSuccess2(response) {
-      this.formData.rewardImage = response.url;
-    },
-    changeDailyLimitMode(data) {
-      this.formData.dailyLimit =
-        data.toString() === 'unlimited' ? '-1' : this.formData.dailyLimit;
-    },
-    changeLimitMode(data) {
-      this.formData.limit =
-        data.toString() === 'unlimited' ? '-1' : this.formData.limit;
-      alert(this.formData.limit);
-    },
-    chooseRewardType(data) {
-      this.formData.type = this.settingsList.filter(
-        item => item.value === data
-      )[0].code;
-      this.formData.crawlerAddress = data;
-    },
-    chooseThirdPartyProduct(data) {
-      this.chosenThirdPartyProductInfo = data;
-    },
-    confirmCrawlerSetting() {
-      this.crawlerSettingFlag = false;
-      this.$message.success('设置成功');
-    },
-
-    focusSortList(queryString, callback) {
-      this.loading = true;
-
-      // this.queryModel = Object.assign(this.queryModel, {
-      //   limit: 999,
-      //   page: 1,
-      //   status: 1,
-      //   title: '',
-      //   description: '',
-      //   gameTypeId: '',
-      // });
-      // console.log(this.queryModel)
-
-      this.$http
-        .get(this.$baseUrl + this.queryRewardProductByNameRequest, {
-          params: {
-            name: this.chosenReward
-          }
-        })
-        .then(response => {
-          console.log(response);
-          this.loading = false;
-          // this.total = response.total;
-          let result = [];
-          if (response.data.length !== 0) {
-            response.data.forEach((item, index) => {
-              result.push(
-                Object.assign(item, {
-                  value: item.name
-                })
-              );
-            });
-
-            console.log(111, result);
-
-            callback(result);
-          }
-        });
-    },
-
-    handleCreate() {
+    async handleCreate() {
       this.dialogFormVisible = true;
       this.dialogStatus = 'create';
-    },
-    handleAddOption() {
-      this.formData.optionList.push({
-        votingId: this.formData.id,
-        title: '',
-        description: ''
-      });
-    },
-    handleDeleteOption(item, index) {
-      this.formData.optionList.splice(index, 1);
+      await this.$nextTick();
+      this.$refs.formData.resetFields();
+      this.getRoleList();
     }
   }
 };

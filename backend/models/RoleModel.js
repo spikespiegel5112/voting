@@ -2,8 +2,8 @@ const Sequelize = require('sequelize');
 
 const sequelize = require('../util/database');
 
-const Voting = sequelize.define(
-  'Voting',
+const Role = sequelize.define(
+  'Role',
   {
     id: {
       type: Sequelize.INTEGER,
@@ -15,21 +15,9 @@ const Voting = sequelize.define(
       type: Sequelize.STRING,
       allowNull: true
     },
-    title: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
-    type: {
+    code: {
       type: Sequelize.STRING,
       allowNull: true
-    },
-    value: {
-      type: Sequelize.TEXT,
-      allowNull: true
-    },
-    isMultiple: {
-      type: Sequelize.BOOLEAN,
-      allowNull: false
     }
   },
   {
@@ -37,4 +25,4 @@ const Voting = sequelize.define(
   }
 );
 
-module.exports = Voting;
+module.exports = Role;

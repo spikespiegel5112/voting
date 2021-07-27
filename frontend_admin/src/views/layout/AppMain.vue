@@ -1,7 +1,6 @@
 <template>
   <el-card class="app-main">
     <transition name="fade" mode="out-in">
-      <!-- <router-view :key="key"></router-view> -->
       <router-view></router-view>
     </transition>
   </el-card>
@@ -15,5 +14,5 @@ export default {
     //   return this.$route.name !== undefined ? this.$route.name + +new Date() : this.$route + +new Date()
     // }
   }
-}
+};
 </script>

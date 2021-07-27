@@ -5,24 +5,13 @@
         <Hamburger
           class="hamburger-container"
           :toggleClick="toggleSideBar"
-          :isActive="sidebar.opened === 1"
+          :isActive="$store.state.app.sidebar.opened === 1"
         />
         <Breadcrumb />
       </el-col>
       <el-col :span="6" class="right-menu">
         <div class="common_environmenthint_item" v-if="$prodEnv">测试环境</div>
-        <!-- <error-log class="errLog-container right-menu-item"></error-log> -->
-
-        <!-- <el-tooltip effect="dark" :content="$t('navbar.screenfull')" placement="bottom">
-        <screenfull class="screenfull right-menu-item"></screenfull>
-      </el-tooltip>-->
-
-        <lang-select class="international right-menu-item"></lang-select>
-
-        <!-- <el-tooltip effect="dark" :content="$t('navbar.theme')" placement="bottom">
-        <theme-picker class="theme-switch right-menu-item"></theme-picker>
-      </el-tooltip>-->
-
+        <LangSelect class="international right-menu-item" />
         <el-dropdown class="avatar-container" trigger="click">
           <div class="common_imguploadpreview_wrapper">
             <img class="user-avatar" :src="avatarImage" />
@@ -37,28 +26,6 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-
-        <!-- <el-dropdown class="avatar-container right-menu-item" trigger="click">
-        <div class="common_imguploadpreview_wrapper">
-          <img class="user-avatar" :src="avatar+'?imageView2/1/w/80/h/80'">
-          <i class="el-icon-caret-bottom"></i>
-        </div>
-        <el-dropdown-menu slot="dropdown">
-          <RouterLink to="/">
-            <el-dropdown-item>
-              {{$t('navbar.dashboard')}}
-            </el-dropdown-item>
-          </RouterLink>
-          <a target='_blank' href="https://github.com/PanJiaChen/vue-element-admin/">
-            <el-dropdown-item>
-              {{$t('navbar.github')}}
-            </el-dropdown-item>
-          </a>
-          <el-dropdown-item divided>
-            <span @click="logout" style="display:block;">{{$t('navbar.logOut')}}</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>-->
       </el-col>
     </el-row>
   </el-menu>

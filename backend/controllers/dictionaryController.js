@@ -23,7 +23,7 @@ const getList = (req, res, next) => {
 			pagination: {
 				total: await Dictionary.count()
 			},
-			data: data
+			data
 		})
 	}).catch(error => {
 		res.status(500).json({
@@ -49,7 +49,7 @@ const createOrUpdate = (req, res, next) => {
 			name: req.body.name,
 		}).then(data => {
 			res.status(200).json({
-				data: data
+				data
 			})
 		}).catch(error => {
 			res.status(500).json({
@@ -71,14 +71,14 @@ const createOrUpdate = (req, res, next) => {
 			data.name = req.body.name;
 			await data.save();
 			res.status(200).json({
-				data: data
+				data
 			})
 		}).catch(error => {
 			res.status(500).json({
 				error: {
 					message: 'Failed',
 					req: req.body,
-					error: error.toString()
+					error
 				}
 			})
 		})
@@ -106,9 +106,9 @@ const deleteItem = (req, res, next) => {
 					});
 				}
 			}).catch(error => {
-				res.status(400).json({
+				res.status(500).json({
 					message: 'Delete failed',
-					error: error.toString()
+					error
 				});
 			})
 		})
@@ -124,9 +124,9 @@ const deleteItem = (req, res, next) => {
 				}
 			})
 		}).catch(error => {
-			res.status(400).json({
+			res.status(500).json({
 				message: 'Delete failed',
-				error: error.toString()
+				error
 			});
 		})
 	}

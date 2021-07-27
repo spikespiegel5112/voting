@@ -1,18 +1,11 @@
 <template>
   <el-container class="common_main_container" :class="classObj">
-    <!-- <div
-      v-if="device === 'mobile' && sidebar.opened"
-      class="drawer-bg"
-      @click="handleClickOutside"
-    ></div> -->
-    <el-aside class="aside" :width="classObj ? '180' : '50'">
+    <el-aside :width="isCollapse ? '64px' : '200px'">
       <Sidebar class="sidebar-container" />
     </el-aside>
-    <el-container>
-      <div class="main-container">
-        <Navbar />
-        <AppMain v-if="heightReadyFlag" />
-      </div>
+    <el-container class="main-container">
+      <Navbar />
+      <AppMain v-if="heightReadyFlag" />
     </el-container>
   </el-container>
 </template>
@@ -20,7 +13,7 @@
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import AppMain from './AppMain';
-import ResizeMixin from './mixin/ResizeHandler';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'layout',
@@ -34,8 +27,11 @@ export default {
       heightReadyFlag: false
     };
   },
-  mixins: [ResizeMixin],
   computed: {
+    ...mapGetters(['sidebar']),
+    isCollapse() {
+      return !this.sidebar.opened;
+    },
     sidebar() {
       return this.$store.state.app.sidebar;
     },
@@ -48,9 +44,6 @@ export default {
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile'
       };
-    },
-    layoutReady() {
-      return this.$store.state.app.layoutHeight > 0;
     }
   },
   created() {},
@@ -92,24 +85,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import 'src/style/mixin.scss';
-.aside {
+// @import 'src/style/mixin.scss';
+.el-aside {
   font-size: 0;
+  transition: all 0.3s ease-in-out;
 }
 .common-main-contaner {
-  @include clearfix;
+  //   @include clearfix;
   position: relative;
   height: 100%;
   width: 100%;
-}
-
-.drawer-bg {
-  background: #000;
-  opacity: 0.3;
-  width: 100%;
-  top: 0;
-  height: 100%;
-  position: absolute;
-  z-index: 999;
 }
 </style>

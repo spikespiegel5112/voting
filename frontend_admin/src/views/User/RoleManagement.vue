@@ -8,19 +8,21 @@
           size="mini"
           type="primary"
           v-waves
-          >新建</el-button
         >
+          添加角色
+        </el-button>
         <el-button
           @click="handleMultipleDelete"
           icon="el-icon-delete"
           size="mini"
           type="danger"
           v-waves
-          >批量删除</el-button
         >
+          批量删除
+        </el-button>
       </template>
       <template slot="quicksearch">
-        <div @keyup.enter="search" class="common-search-wrapper">
+        <div @keyup.enter="search" class="common_search_wrapper">
           <label>
             <input
               placeholder="请输入"
@@ -34,7 +36,6 @@
         </div>
       </template>
     </CommonQuery>
-
     <el-table
       :data="tableList"
       :height="tableHeight"
@@ -45,7 +46,11 @@
       highlight-current-row
       v-loading.body="listLoading"
     >
-      <el-table-column type="selection" width="40"></el-table-column>
+      <el-table-column
+        fixed="left"
+        type="selection"
+        width="30"
+      ></el-table-column>
       <el-table-column
         align="center"
         fixed
@@ -53,161 +58,140 @@
         type="index"
         width="45"
       ></el-table-column>
+      <el-table-column
+        align="center"
+        label="角色名称"
+        prop="name"
+      ></el-table-column>
+      <el-table-column align="center" label="角色Code" prop="code">
+      </el-table-column>
 
-      <el-table-column
-        align="center"
-        label="Unicode"
-        prop="unicode"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="Number"
-        prop="number"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="Value"
-        prop="value"
-      ></el-table-column>
-      <el-table-column align="center" label="操作" width="200px">
+      <el-table-column align="center" fixed="right" label="操作" width="300">
         <template slot-scope="scope">
-          <el-button @click="handleUpdate(scope)" size="mini" type="primary"
-            >编辑</el-button
-          >
-          <el-button @click="handleDelete(scope)" size="mini" type="danger"
-            >删除</el-button
-          >
+          <el-button @click="handleUpdate(scope)" size="mini" type="primary">
+            编辑
+          </el-button>
+          <el-button @click="handleDelete(scope)" size="mini" type="danger">
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <div class="common-pagination-wrapper">
+    <div class="common_pagination_wrapper">
       <el-pagination
         :current-page.sync="pagination.page"
         :page-size="pagination.limit"
         :page-sizes="[10, 20, 30, 50, 100]"
-        :total="total"
+        :total="pagination.total"
         @current-change="handleCurrentChange"
         @size-change="handleSizeChange"
         background
         layout="total, sizes, prev, pager, next, jumper"
-      ></el-pagination>
+      >
+      </el-pagination>
     </div>
-    <!-- 编辑-->
+    <!-- 编辑 -->
+    <!-- 123 -->
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="dialogFormVisible"
-      width="850px"
+      top="5vh"
+      :close-on-click-modal="false"
     >
-      <el-row justify="center" type="flex">
-        <el-col :span="20">
-          <el-form
-            :model="formData"
-            :rules="rules"
-            label-position="right"
-            label-width="140px"
-            ref="formData"
-          >
-            <el-form-item label="Unicode" prop="unicode">
-              <el-input v-model="formData.unicode"></el-input>
+      <el-form
+        ref="formData"
+        :model="formData"
+        :rules="rules"
+        label-position="right"
+        label-width="100px"
+        class="dialog_wrapper"
+      >
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="角色名称" prop="name">
+              <el-input v-model="formData.name"></el-input>
             </el-form-item>
-            <el-form-item label="Number" prop="number">
-              <el-input v-model="formData.number"></el-input>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="角色Code" prop="code">
+              <el-input v-model="formData.code"></el-input>
             </el-form-item>
-            <el-form-item label="Value" prop="value">
-              <el-input v-model="formData.value"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-      <div class="dialog-footer" slot="footer">
-        <el-button @click="dialogFormVisible = false" v-waves>{{
-          $t('table.cancel')
-        }}</el-button>
-        <el-button @click="updateData" type="primary">{{
-          $t('table.confirm')
-        }}</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+      <whiteSpace size="xl" />
+      <div class="footer alignright">
+        <el-button
+          type="primary"
+          :disabled="submitingFlag"
+          @click="handleSubmit"
+          >保存</el-button
+        >
+        <el-button @click="dialogFormVisible = false">取消</el-button>
       </div>
     </el-dialog>
   </el-row>
 </template>
 
 <script>
-import CommonTag from '@/views/common/CommonTag.vue';
-import CommonQuery from '@/views/common/CommonQuery.vue';
-
 export default {
-  components: {
-    CommonTag,
-    CommonQuery
-  },
   data() {
     return {
-      getListRequest: 'glyphMapping/getList',
-      createOrUpdateRequest: 'glyphMapping/createOrUpdate',
-      deleteItemRequest: 'glyphMapping/deleteItem',
-
+      getListByPaginationRequest: 'role/getListByPagination',
+      createOrUpdateRequest: 'role/createOrUpdate',
+      deleteItemsRequest: 'role/deleteItems',
+      dialogFormVisible: false,
       tableList: [],
-      total: null,
       listLoading: true,
+      availabilityFlag: false,
       queryModel: {
         sort: 'desc',
-        typeCode: ''
+        brandName: ''
       },
       pagination: {
         page: 1,
-        limit: 50
+        limit: 100
       },
-
       sortOptions: [
         { label: 'ID Ascending', key: '+id' },
         { label: 'ID Descending', key: '-id' }
       ],
+      statusOptions: ['published', 'draft', 'deleted'],
+      showReviewer: false,
       formData: {
-        id: '',
-        mappingId: '',
-        unicode: '',
-        number: '',
-        value: ''
-      },
-      typeFormData: {
         name: '',
         code: ''
       },
-      typeList: [],
+      currentVotingFormdata: [],
       dialogFormVisible: false,
-      addTypeFlag: false,
       dialogStatus: '',
       textMap: {
         update: 'Edit',
         create: 'Create'
       },
       dialogPvVisible: false,
+      submitingFlag: false,
+      roleList: [],
       rules: {
-        unicode: [
-          { required: true, message: '此项为必填项', trigger: 'change' }
-        ],
-        number: [
-          { required: true, message: '此项为必填项', trigger: 'change' }
-        ],
-        value: [{ required: true, message: '此项为必填项', trigger: 'change' }]
-      },
-      pickerOptions1: {
-        disabledDate: time => {
-          return time.getTime() < this.value1;
-        }
-      },
-      fileList: [],
-      portraitParams: {
-        bucketName: 'funyvalley',
-        folderName: 'icon'
-      },
-      expandQuery: ''
+        name: [{ required: true, message: '此项为必填项', trigger: 'change' }],
+        code: [{ required: true, message: '此项为必填项', trigger: 'change' }]
+      }
     };
   },
   computed: {
     tableHeight() {
       return this.$store.state.app.tableHeight;
+    },
+    dictionaryList() {
+      return this.$store.state.app.dictionary.crawlerAddress;
+    },
+    dialogHeight() {
+      return {
+        height: '60vh'
+      };
     }
   },
   watch: {
@@ -223,7 +207,7 @@ export default {
       console.log(value);
     }
   },
-  mounted() {
+  async mounted() {
     this.getTableData();
   },
   methods: {
@@ -231,15 +215,16 @@ export default {
       this.listLoading = true;
       this.queryModel = Object.assign(this.queryModel, this.pagination);
       this.$http
-        .get(this.$baseUrl + this.getListRequest, {
+        .get(this.$baseUrl + this.getListByPaginationRequest, {
           params: this.queryModel
         })
         .then(response => {
           console.log('getListByPaginationRequest', response);
-
           this.tableList = response.data;
-          this.total = response.pagination.total;
           this.listLoading = false;
+        })
+        .catch(error => {
+          console.log(error);
         });
     },
     handleFilter() {
@@ -254,66 +239,71 @@ export default {
       this.pagination.page = val;
       this.getTableData();
     },
-    resetTemp() {
-      this.formData = {
-        id: '',
-        mappingId: '',
-        unicode: '',
-        number: '',
-        value: ''
-      };
-      if (this.$refs.formData) {
-        this.$refs.formData.resetFields();
-      }
-    },
-    handleCreate() {
-      this.dialogStatus = 'create';
-      this.resetTemp();
-      console.log(this.typeList);
-      this.dialogFormVisible = true;
-    },
-    handleUpdate(scope) {
-      this.$nextTick(() => {
-        this.formData = Object.assign({}, scope.row);
-        this.dialogStatus = 'update';
-        this.dialogFormVisible = true;
-        this.$nextTick(() => {
-          this.$refs['formData'].clearValidate();
-        });
-      });
-    },
-    chooseType(val) {
-      this.formData.typeName = this.typeList.filter(
-        item => item.code === val
-      )[0].name;
-    },
-    updateData() {
-      this.$refs['formData'].validate(valid => {
-        if (valid) {
+
+    createData() {},
+    handleSubmit() {
+      this.$refs.formData
+        .validate()
+        .then(valid => {
+          console.log(valid);
+          console.log(this.formData);
+          this.submitingFlag = true;
+
           this.$http
             .post(this.$baseUrl + this.createOrUpdateRequest, {
-              id: this.formData.id,
-              mappingId: this.formData.mappingId,
-              unicode: this.formData.unicode,
-              number: this.formData.number,
-              value: this.formData.value
+              ...this.formData
             })
             .then(response => {
               console.log(response);
+              this.submitingFlag = false;
+              this.$message.success('提交成功');
               this.dialogFormVisible = false;
-              this.$message.success('信息修改成功');
               this.getTableData();
             })
             .catch(error => {
-              console.log(error);
-              this.$message.error(
-                `${error.response.status.toString()}  ${
-                  error.response.data.error
-                }`
-              );
+              console.log('handleSubmit++++', error);
+              this.submitingFlag = false;
+              this.$message.error(error.data.message || '提交失败');
             });
-        }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    handleVote(scope) {
+      this.voteDialogVisible = true;
+      this.getVotingOptions(scope);
+      this.currentVotingFormdata = this.formData.optionList;
+    },
+    handleUpdate(scope) {
+      console.log(scope);
+      this.formData = {
+        ...this.formData,
+        ...scope.row
+      };
+      this.dialogStatus = 'update';
+      this.dialogFormVisible = true;
+      this.formData.id = scope.row.id;
+      this.$nextTick(() => {
+        this.$refs['formData'].clearValidate();
       });
+    },
+    getVotingOptions(scope) {
+      this.$http
+        .get(this.$baseUrl + this.getVotingOptionsRequest, {
+          params: {
+            votingId: scope.row.id
+          }
+        })
+        .then(response => {
+          console.log('getVotingOptions++++++', response);
+          response = response.data;
+          this.formData.optionList = response;
+          console.log('getVotingOptions++++++', this.formData.optionList);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -326,11 +316,12 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.deleteRecord(
-            this.multipleSelection.map(item => {
+          console.log('this.multipleSelection+++++', this.multipleSelection);
+          this.deleteRecord({
+            id: this.multipleSelection.map(item => {
               return item.id;
             })
-          );
+          });
         })
         .catch(() => {
           this.$message({
@@ -347,7 +338,9 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.deleteRecord([scope.row.id]);
+          this.deleteRecord({
+            id: scope.row.id
+          });
         })
         .catch(() => {
           this.$message({
@@ -356,12 +349,10 @@ export default {
           });
         });
     },
-    deleteRecord(data) {
+    deleteRecord(params) {
       this.$http
-        .delete(this.$baseUrl + this.deleteItemRequest, {
-          data: {
-            id: data
-          }
+        .delete(this.$baseUrl + this.deleteItemsRequest, {
+          data: params
         })
         .then(response => {
           console.log(response);
@@ -385,10 +376,21 @@ export default {
     },
     reset() {
       this.queryModel.available = true;
+    },
+
+    async handleCreate() {
+      this.formData.id = '';
+      this.dialogFormVisible = true;
+      this.dialogStatus = 'create';
+      await this.$nextTick();
+      this.$refs.formData.resetFields();
+      console.log(this.formData);
     }
   }
 };
 </script>
 <style lang="scss" scoped>
-@import '../../style/edifice.scss';
+.dialog_wrapper {
+  overflow: auto;
+}
 </style>

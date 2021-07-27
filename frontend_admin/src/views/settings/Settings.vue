@@ -25,7 +25,7 @@
         <div @keyup.enter="search" class="common_search_wrapper">
           <label>
             <input
-              placeholder="请输入游戏名称"
+              placeholder="请输入"
               type="text"
               v-model="queryModel.brandName"
             />
@@ -571,6 +571,6 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 @import '../../style/edifice.scss';
 </style>

@@ -7,5 +7,4 @@ router.get('/getList', SettingsController.getList);
 router.post('/createOrUpdate', SettingsController.createOrUpdate);
 router.delete('/deleteItems', SettingsController.deleteItems);
 
-
 module.exports = router;

@@ -68,11 +68,15 @@ a:hover {
 .app-main {
     min-height: calc(100vh - 70px);
 }
-.alginright {
+.alignright {
     text-align: right;
 }
-.alginleft {
+.alignleft {
     text-align: left;
+}
+
+.el-select {
+    width: 100%;
 }
 
 .common_main_container {

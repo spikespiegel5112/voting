@@ -60,6 +60,25 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/User',
+    component: Layout,
+    name: 'User',
+    hidden: false,
+    meta: { title: '用户管理', icon: 'iconfont icon-mail' },
+    children: [
+      {
+        path: 'UserManagement',
+        component: () => import('@/views/User/UserManagement'),
+        meta: { title: '用户管理', icon: 'iconfont icon-mail' }
+      },
+      {
+        path: 'RoleManagement',
+        component: () => import('@/views/User/RoleManagement'),
+        meta: { title: '角色管理', icon: 'iconfont icon-mail' }
+      }
+    ]
+  },
+  {
     path: '/settings',
     component: Layout,
     redirect: '/settings/headers',
