@@ -2,33 +2,17 @@
   <el-row>
     <CommonQuery>
       <template slot="button1">
-        <el-button
-          @click="handleCreate"
-          icon="el-icon-plus"
-          size="mini"
-          type="primary"
-          v-waves
-        >
+        <el-button @click="handleCreate" icon="el-icon-plus" size="mini" type="primary" v-waves>
           添加投票
         </el-button>
-        <el-button
-          @click="handleMultipleDelete"
-          icon="el-icon-delete"
-          size="mini"
-          type="danger"
-          v-waves
-        >
+        <el-button @click="handleMultipleDelete" icon="el-icon-delete" size="mini" type="danger" v-waves>
           批量删除
         </el-button>
       </template>
       <template slot="quicksearch">
         <div @keyup.enter="search" class="common_search_wrapper">
           <label>
-            <input
-              placeholder="请输入"
-              type="text"
-              v-model="queryModel.brandName"
-            />
+            <input placeholder="请输入" type="text" v-model="queryModel.brandName" />
           </label>
           <a>
             <span @click="search" class="el-icon-search"></span>
@@ -36,42 +20,13 @@
         </div>
       </template>
     </CommonQuery>
-    <el-table
-      :data="tableList"
-      :height="tableHeight"
-      @selection-change="handleSelectionChange"
-      border
-      element-loading-text="Loading"
-      fit
-      highlight-current-row
-      v-loading.body="listLoading"
-    >
-      <el-table-column
-        fixed="left"
-        type="selection"
-        width="30"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        fixed
-        label="No"
-        type="index"
-        width="45"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="投票名称"
-        prop="title"
-      ></el-table-column>
+    <el-table :data="tableList" :height="tableHeight" @selection-change="handleSelectionChange" border element-loading-text="Loading" fit highlight-current-row v-loading.body="listLoading">
+      <el-table-column fixed="left" type="selection" width="30"></el-table-column>
+      <el-table-column align="center" fixed label="No" type="index" width="45"></el-table-column>
+      <el-table-column align="center" label="投票名称" prop="title"></el-table-column>
       <el-table-column align="center" label="是否多选" prop="isMultiple">
         <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.isMultiple"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-            disabled
-          >
-          </el-switch>
+          <el-switch v-model="scope.row.isMultiple" active-color="#13ce66" inactive-color="#ff4949" disabled> </el-switch>
         </template>
       </el-table-column>
 
@@ -91,54 +46,21 @@
     </el-table>
     <!-- 分页 -->
     <div class="common_pagination_wrapper">
-      <el-pagination
-        :current-page.sync="pagination.page"
-        :page-size="pagination.limit"
-        :page-sizes="[10, 20, 30, 50, 100]"
-        :total="total"
-        @current-change="handleCurrentChange"
-        @size-change="handleSizeChange"
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-      >
-      </el-pagination>
+      <el-pagination :current-page.sync="pagination.page" :page-size="pagination.limit" :page-sizes="[10, 20, 30, 50, 100]" :total="total" @current-change="handleCurrentChange" @size-change="handleSizeChange" background layout="total, sizes, prev, pager, next, jumper"> </el-pagination>
     </div>
     <!-- 编辑 -->
     <!-- 123 -->
-    <el-dialog
-      :title="textMap[dialogStatus]"
-      :visible.sync="dialogFormVisible"
-      top="5vh"
-      :close-on-click-modal="false"
-    >
-      <el-form
-        ref="formData"
-        :model="formData"
-        :rules="rules"
-        label-position="right"
-        label-width="80px"
-        :style="dialogHeight"
-        class="dialog_wrapper"
-      >
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" top="5vh" :close-on-click-modal="false">
+      <el-form ref="formData" :model="formData" :rules="rules" label-position="right" label-width="80px" :style="dialogHeight" class="dialog_wrapper">
         <el-form-item label="投票名称" prop="title">
           <el-input v-model="formData.title"></el-input>
         </el-form-item>
         <el-form-item label="是否多选" prop="isMultiple">
-          <el-switch
-            v-model="formData.isMultiple"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          >
-          </el-switch>
+          <el-switch v-model="formData.isMultiple" active-color="#13ce66" inactive-color="#ff4949"> </el-switch>
         </el-form-item>
         <el-row>
           <el-col class="addselection alignright" :span="24">
-            <el-button
-              type="success"
-              icon="el-icon-plus"
-              size="mini"
-              @click="handleAddOption"
-            >
+            <el-button type="success" icon="el-icon-plus" size="mini" @click="handleAddOption">
               添加
             </el-button>
           </el-col>
@@ -146,56 +68,29 @@
         <WhiteSpace />
 
         <div v-if="formData.optionList.length > 0">
-          <el-form-item
-            v-for="(item, index) in formData.optionList"
-            :key="index"
-            :label="'选项' + (index + 1)"
-            prop="isMultiple"
-          >
+          <el-form-item v-for="(item, index) in formData.optionList" :key="index" :label="'选项' + (index + 1)" prop="isMultiple">
             <el-input v-model="item.title">
               <template>
-                <el-button
-                  v-if="formData.optionList.length > 0"
-                  type="success"
-                  icon="el-icon-delete"
-                  size="mini"
-                  slot="append"
-                  @click="handleDeleteOption(item, index)"
-                >
-                </el-button>
+                <el-button v-if="formData.optionList.length > 0" type="success" icon="el-icon-delete" size="mini" slot="append" @click="handleDeleteOption(item, index)"> </el-button>
               </template>
             </el-input>
           </el-form-item>
         </div>
         <div v-else>
-          <el-empty image-size="100"></el-empty>
+          <el-empty :image-size="100"></el-empty>
         </div>
       </el-form>
       <whiteSpace size="xl" />
       <div class="footer alignright">
-        <el-button
-          type="primary"
-          :disabled="submitingFlag"
-          @click="handleSubmit"
-          >保存</el-button
-        >
+        <el-button type="primary" :disabled="submitingFlag" @click="handleSubmit">保存</el-button>
         <el-button @click="dialogFormVisible = false">取消</el-button>
       </div>
     </el-dialog>
     <!-- 投票 -->
     <!-- 456 -->
-    <el-dialog
-      title="投票"
-      :visible.sync="voteDialogVisible"
-      top="5vh"
-      :close-on-click-modal="false"
-    >
+    <el-dialog title="投票" :visible.sync="voteDialogVisible" top="5vh" :close-on-click-modal="false">
       <el-checkbox-group v-model="currentVotingFormdata">
-        <el-checkbox
-          v-for="(item, index) in currentVotingFormdata"
-          :key="index"
-          :label="item.title"
-        ></el-checkbox>
+        <el-checkbox v-for="(item, index) in currentVotingFormdata" :key="index" :label="item.title"></el-checkbox>
       </el-checkbox-group>
       <div class="footer alignright">
         <el-button @click="voteDialogVisible = false">关闭</el-button>
@@ -238,7 +133,7 @@ export default {
       },
       pagination: {
         page: 1,
-        limit: 100
+        limit: 30
       },
       sortOptions: [
         { label: 'ID Ascending', key: '+id' },
@@ -266,9 +161,7 @@ export default {
       },
       rules: {
         title: [{ required: true, message: '此项为必填项', trigger: 'change' }],
-        isMultiple: [
-          { required: true, message: '此项为必填项', trigger: 'change' }
-        ]
+        isMultiple: [{ required: true, message: '此项为必填项', trigger: 'change' }]
       }
     };
   },
@@ -462,9 +355,7 @@ export default {
         })
         .catch(error => {
           console.log(error);
-          this.$message.error(
-            `${error.response.status.toString()}  ${error.response.data.error}`
-          );
+          this.$message.error(`${error.response.status.toString()}  ${error.response.data.error}`);
         });
     },
 
@@ -486,18 +377,14 @@ export default {
       this.formData.rewardImage = response.url;
     },
     changeDailyLimitMode(data) {
-      this.formData.dailyLimit =
-        data.toString() === 'unlimited' ? '-1' : this.formData.dailyLimit;
+      this.formData.dailyLimit = data.toString() === 'unlimited' ? '-1' : this.formData.dailyLimit;
     },
     changeLimitMode(data) {
-      this.formData.limit =
-        data.toString() === 'unlimited' ? '-1' : this.formData.limit;
+      this.formData.limit = data.toString() === 'unlimited' ? '-1' : this.formData.limit;
       alert(this.formData.limit);
     },
     chooseRewardType(data) {
-      this.formData.type = this.settingsList.filter(
-        item => item.value === data
-      )[0].code;
+      this.formData.type = this.settingsList.filter(item => item.value === data)[0].code;
       this.formData.crawlerAddress = data;
     },
     chooseThirdPartyProduct(data) {

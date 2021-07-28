@@ -12,11 +12,9 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
-    return queryInterface.addColumn('maoyanmodels', 'timestamp', Sequelize.STRING, {
-      after: 'id' // after option is only supported by MySQL
+    return queryInterface.addColumn('User', 'description', Sequelize.STRING, {
+      after: 'loginName' // after option is only supported by MySQL
     });
-    // return queryInterface.removeColumn('maoyanmodels', 'timestamp')
-
   },
 
   down: (queryInterface, Sequelize) => {

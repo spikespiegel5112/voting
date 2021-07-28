@@ -153,7 +153,7 @@ export default {
       },
       pagination: {
         page: 1,
-        limit: 100
+        limit: 30
       },
       sortOptions: [
         { label: 'ID Ascending', key: '+id' },

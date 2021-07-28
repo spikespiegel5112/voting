@@ -69,7 +69,6 @@ const createOrUpdate = async (req, res, next) => {
       res.status(400).json({
         message: '不能定义重复的code'
       });
-      ``;
     }
     RoleModel.create({
       id: uuidv1(),

@@ -4,12 +4,17 @@ const UserModel = require('../models/UserModel');
 
 const createOrUpdate = (req, res, next) => {
   const id = req.body.id;
+  let role = req.body.role;
+  //   if (role instanceof Array) {
+  //     role = role.join(',');
+  //   }
   if (!id || id === '') {
     UserModel.create({
       id: uuidv1(),
       loginName: req.body.loginName,
-      role: req.body.role,
+      role: role,
       password: req.body.password,
+      description: req.body.description,
       phone: req.body.phone,
       address: req.body.address,
       email: req.body.email
@@ -40,7 +45,8 @@ const createOrUpdate = (req, res, next) => {
         console.log(data);
         data.loginName = req.body.loginName;
         data.password = req.body.password;
-        data.role = req.body.role;
+        data.role = role;
+        data.description = req.body.description;
         data.phone = req.body.phone;
         data.address = req.body.address;
         data.email = req.body.email;

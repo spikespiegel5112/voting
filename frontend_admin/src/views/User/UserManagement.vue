@@ -60,8 +60,13 @@
       ></el-table-column>
       <el-table-column
         align="center"
-        label="用户名称"
+        label="登录名称"
         prop="loginName"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="描述"
+        prop="description"
       ></el-table-column>
       <el-table-column
         align="center"
@@ -140,15 +145,22 @@
           </el-col>
         </el-row>
         <el-row>
+          <el-col :span="24">
+            <el-form-item label="描述" prop="description">
+              <el-input v-model="formData.description"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="角色" prop="role">
-              <el-select v-model="formData.role">
+              <el-select v-model="formData.role" multiple>
                 <el-option
                   v-for="(item, index) in roleList"
                   :key="index"
                   :value="item.code"
+                  :label="item.name"
                 >
-                  {{ item.name }}
                 </el-option>
               </el-select>
             </el-form-item>
@@ -182,8 +194,9 @@
           type="primary"
           :disabled="submitingFlag"
           @click="handleSubmit"
-          >保存</el-button
         >
+          保存
+        </el-button>
         <el-button @click="dialogFormVisible = false">取消</el-button>
       </div>
     </el-dialog>
@@ -224,7 +237,7 @@ export default {
       },
       pagination: {
         page: 1,
-        limit: 100
+        limit: 30
       },
       sortOptions: [
         { label: 'ID Ascending', key: '+id' },
@@ -244,7 +257,12 @@ export default {
       formData: {
         loginName: '',
         password: '',
-        role: ''
+        role: '',
+        description: '',
+        role: '',
+        address: '',
+        phone: '',
+        email: ''
       },
       rules: {
         loginName: [
@@ -253,7 +271,10 @@ export default {
         password: [
           { required: true, message: '此项为必填项', trigger: 'change' }
         ],
-        role: [{ required: true, message: '此项为必填项', trigger: 'change' }]
+        role: [{ required: true, message: '此项为必填项', trigger: 'change' }],
+        description: [
+          { required: true, message: '此项为必填项', trigger: 'change' }
+        ]
       }
     };
   },
@@ -284,6 +305,7 @@ export default {
         })
         .then(response => {
           console.log('getListByPaginationRequest', response);
+
           this.tableDAta = response.data;
           this.total = response.pagination.total;
           this.listLoading = false;
@@ -328,9 +350,15 @@ export default {
           console.log(valid);
           console.log(this.formData);
           this.submitingFlag = true;
-
+          const params = {
+            ...this.formData,
+            role:
+              this.formData.role instanceof Array
+                ? this.formData.role.join(',')
+                : this.formData.role
+          };
           this.$http
-            .post(this.$baseUrl + this.createOrUpdateRequest, this.formData)
+            .post(this.$baseUrl + this.createOrUpdateRequest, params)
             .then(response => {
               console.log(response);
               this.submitingFlag = false;
@@ -352,7 +380,8 @@ export default {
       console.log(scope);
       this.formData = {
         ...this.formData,
-        ...scope.row
+        ...scope.row,
+        role: scope.row.role.split(',')
       };
       this.dialogStatus = 'update';
       this.dialogFormVisible = true;
