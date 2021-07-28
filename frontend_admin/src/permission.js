@@ -1,12 +1,12 @@
-import router from './router/router'
-import store from './store/store'
-import NProgress from 'nprogress' // Progress 进度条
-import 'nprogress/nprogress.css'// Progress 进度条样式
+import router from './router/router';
+import store from './store/store';
+import NProgress from 'nprogress'; // Progress 进度条
+import 'nprogress/nprogress.css'; // Progress 进度条样式
 
-const whiteList = ['/login'] // 不重定向白名单
+const whiteList = ['/login']; // 不重定向白名单
 router.beforeEach((to, from, next) => {
-  NProgress.start()
-  next()
+  NProgress.start();
+  next();
 
   // if (()) {
   //   if (to.path === '/login') {
@@ -40,8 +40,8 @@ router.beforeEach((to, from, next) => {
   //     NProgress.done()
   //   }
   // }
-})
+});
 
 router.afterEach(() => {
-  NProgress.done() // 结束Progress
-})
+  NProgress.done(); // 结束Progress
+});

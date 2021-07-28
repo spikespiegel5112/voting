@@ -90,8 +90,14 @@
     <!-- 456 -->
     <el-dialog title="投票" :visible.sync="voteDialogVisible" top="5vh" :close-on-click-modal="false">
       <el-checkbox-group v-model="currentVotingFormdata">
-        <el-checkbox v-for="(item, index) in currentVotingFormdata" :key="index" :label="item.title"></el-checkbox>
+        <el-row v-for="(item, index) in currentVotingFormdata" :key="index">
+          <el-col :span="4">
+            <el-checkbox :label="item.title"></el-checkbox>
+          </el-col>
+          <el-col :span="20"> </el-col>
+        </el-row>
       </el-checkbox-group>
+
       <div class="footer alignright">
         <el-button @click="voteDialogVisible = false">关闭</el-button>
       </div>
@@ -258,9 +264,9 @@ export default {
           console.log(error);
         });
     },
-    handleVote(scope) {
+    async handleVote(scope) {
       this.voteDialogVisible = true;
-      this.getVotingOptions(scope);
+      await this.getVotingOptions(scope);
       this.currentVotingFormdata = this.formData.optionList;
     },
     handleUpdate(scope) {
@@ -278,21 +284,25 @@ export default {
       });
     },
     getVotingOptions(scope) {
-      this.$http
-        .get(this.$baseUrl + this.getVotingOptionsRequest, {
-          params: {
-            votingId: scope.row.id
-          }
-        })
-        .then(response => {
-          console.log('getVotingOptions++++++', response);
-          response = response.data;
-          this.formData.optionList = response;
-          console.log('getVotingOptions++++++', this.formData.optionList);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      return new Promise((resolve, reject) => {
+        this.$http
+          .get(this.$baseUrl + this.getVotingOptionsRequest, {
+            params: {
+              votingId: scope.row.id
+            }
+          })
+          .then(response => {
+            console.log('getVotingOptions++++++', response);
+            response = response.data;
+            this.formData.optionList = response;
+            console.log('getVotingOptions++++++', this.formData.optionList);
+            resolve(response);
+          })
+          .catch(error => {
+            console.log(error);
+            reject(error);
+          });
+      });
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;

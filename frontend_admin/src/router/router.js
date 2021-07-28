@@ -53,6 +53,11 @@ export const constantRouterMap = [
     meta: { title: '投票管理', icon: 'iconfont icon-mail' },
     children: [
       {
+        path: 'Vote',
+        component: () => import('@/views/Vote'),
+        meta: { title: '投票', icon: 'iconfont icon-mail' }
+      },
+      {
         path: 'VotingManagement',
         component: () => import('@/views/Voting/VotingManagement'),
         meta: { title: '投票管理', icon: 'iconfont icon-mail' }
@@ -81,16 +86,9 @@ export const constantRouterMap = [
   {
     path: '/settings',
     component: Layout,
-    redirect: '/settings/headers',
     name: 'settingsLayout',
     meta: { title: '设置', icon: 'iconfont icon-mail' },
     children: [
-      {
-        path: '',
-        name: 'settings',
-        component: () => import('@/views/settings/Settings'),
-        meta: { title: '参数设置', icon: 'iconfont icon-mail' }
-      },
       {
         path: 'dictionary',
         name: 'dictionary',
