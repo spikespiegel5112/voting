@@ -1,13 +1,14 @@
 const express = require('express');
 const uuidv1 = require('uuid/v1');
+const crypto = require('crypto');
 const UserModel = require('../models/UserModel');
+const { encryptPromise, decrypt } = require('./CommonController');
+
 
 const createOrUpdate = (req, res, next) => {
   const id = req.body.id;
   let role = req.body.role;
-  //   if (role instanceof Array) {
-  //     role = role.join(',');
-  //   }
+
   if (!id || id === '') {
     UserModel.create({
       id: uuidv1(),
@@ -68,6 +69,55 @@ const createOrUpdate = (req, res, next) => {
   }
 };
 
+const deleteItems = (req, res, next) => {
+  const id = req.body.id;
+  console.log(id instanceof Array);
+  if (id instanceof Array) {
+    id.forEach((item, index) => {
+      UserModel.findAll({
+        where: {
+          id: item
+        }
+      })
+        .then(async (response) => {
+          response.forEach(async (item2) => {
+            const result = await item2.destroy();
+            res.status(200).json({
+              message: 'Delete successful',
+              body: result
+            });
+          });
+        })
+        .catch((error) => {
+          res.status(500).json({
+            message: 'Delete failed',
+            error
+          });
+        });
+    });
+  } else {
+    UserModel.destroy({
+      where: {
+        id
+      }
+    })
+      .then((result) => {
+        console.log('result+++++', result);
+
+        res.status(200).json({
+          message: 'Delete successful',
+          id
+        });
+      })
+      .catch((error) => {
+        res.status(500).json({
+          message: 'Delete failed',
+          error
+        });
+      });
+  }
+};
+
 const getListByPagination = (req, res, next) => {
   let pagination = {};
   let query = {};
@@ -87,6 +137,13 @@ const getListByPagination = (req, res, next) => {
   UserModel.findAll(Object.assign(query, pagination))
     .then(async (response) => {
       console.log('getListByPagination+++++', response);
+      response = response.map((item) => {
+        const password = decrypt(item.password || '');
+        return {
+          ...item,
+          password
+        };
+      });
       res.status(200).json({
         pagination: {
           total: await UserModel.count()
@@ -103,13 +160,30 @@ const getListByPagination = (req, res, next) => {
     });
 };
 
-const register = (req, res, next) => {
+const register = async (req, res, next) => {
+  UserModel.findOne({
+    where: {
+      loginName: req.body.loginName
+    }
+  })
+    .then((response) => {
+      //   response = response.toJSON();
+      if (!!response && response.toJSON().loginName === req.body.loginName) {
+        res.status(400).json({
+          message: '此用户名已存在'
+        });
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+  const password = await encryptPromise(req.body.password);
+
   UserModel.create({
+    id: uuidv1(),
     loginName: req.body.loginName,
-    name: req.body.name,
-    phone: req.body.phone,
-    email: req.body.email,
-    address: req.body.address
+    password
   })
     .then((response) => {
       res.status(200).json({
@@ -126,23 +200,29 @@ const register = (req, res, next) => {
 const login = (req, res, next) => {
   UserModel.findOne({
     where: {
-      loginName: req.query.loginName
+      loginName: req.body.loginName
     }
   })
-    .then((response) => {
-      if (response.password === req.query.password) {
+    .then(async (response) => {
+      const responsePassword = response.password;
+      const requestPassword = await encryptPromise(req.body.password);
+
+      if (responsePassword === requestPassword) {
+        req.session.loginName = req.body.loginName;
         res.status(200).json({
-          data: req.query
+          data: req.body
         });
       } else {
-        res.status(500).json({
+        res.status(400).json({
           message: '密码不对'
         });
       }
     })
     .catch((error) => {
-      res.status(500).json({
-        message: '无此用户'
+      console.log(error);
+      res.status(400).json({
+        message: '无此用户',
+        error
       });
     });
 };
@@ -186,6 +266,7 @@ const userInfo = (req, res, next) => {
 
 exports.createOrUpdate = createOrUpdate;
 exports.getListByPagination = getListByPagination;
+exports.deleteItems = deleteItems;
 exports.register = register;
 exports.login = login;
 exports.logout = logout;

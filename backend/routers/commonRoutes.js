@@ -1,20 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-const commonController = require('../controllers/commonController');
+const CommonController = require('../controllers/CommonController');
 
-
-router.post('/woffParser', commonController.woffParser);
-// router.post('/fontCmap', commonController.fontCmap);
-router.post('/getFontDataByBase64', commonController.getFontDataByBase64);
-router.get('/getBase64Data', commonController.getBase64Data);
-router.get('/getFontDataFromPage', commonController.getFontDataFromPage);
-router.post('/generateFontDictionary', commonController.generateFontDictionary);
-router.get('/getFontDictionaryFromPage', commonController.getFontDictionaryFromPage);
-router.post('/arrayBufferToBase64', commonController.arrayBufferToBase64);
-router.post('/getFontFile', commonController.getFontFile);
-router.post('/getDecodeFontValue', commonController.getDecodeFontValue);
-router.post('/exportCSV', commonController.exportCSV);
-
+router.get('/getBase64Data', CommonController.getBase64Data);
+router.post('/arrayBufferToBase64', CommonController.arrayBufferToBase64);
+router.post('/exportCSV', CommonController.exportCSV);
+router.post('/encryptPromise', CommonController.encryptPromise);
+router.post('/decrypt', CommonController.decrypt);
 
 module.exports = router;

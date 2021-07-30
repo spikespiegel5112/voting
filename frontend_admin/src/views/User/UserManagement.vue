@@ -2,33 +2,17 @@
   <el-row>
     <CommonQuery>
       <template slot="button1">
-        <el-button
-          @click="handleCreate"
-          icon="el-icon-plus"
-          size="mini"
-          type="primary"
-          v-waves
-        >
+        <el-button @click="handleCreate" icon="el-icon-plus" size="mini" type="primary" v-waves>
           添加用户
         </el-button>
-        <el-button
-          @click="handleMultipleDelete"
-          icon="el-icon-delete"
-          size="mini"
-          type="danger"
-          v-waves
-        >
+        <el-button @click="handleMultipleDelete" icon="el-icon-delete" size="mini" type="danger" v-waves>
           批量删除
         </el-button>
       </template>
       <template slot="quicksearch">
         <div @keyup.enter="search" class="common_search_wrapper">
           <label>
-            <input
-              placeholder="请输入"
-              type="text"
-              v-model="queryModel.brandName"
-            />
+            <input placeholder="请输入" type="text" v-model="queryModel.brandName" />
           </label>
           <a>
             <span @click="search" class="el-icon-search"></span>
@@ -36,58 +20,15 @@
         </div>
       </template>
     </CommonQuery>
-    <el-table
-      :data="tableDAta"
-      :height="tableHeight"
-      @selection-change="handleSelectionChange"
-      border
-      element-loading-text="Loading"
-      fit
-      highlight-current-row
-      v-loading.body="listLoading"
-    >
-      <el-table-column
-        fixed="left"
-        type="selection"
-        width="30"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        fixed
-        label="No"
-        type="index"
-        width="45"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="登录名称"
-        prop="loginName"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="描述"
-        prop="description"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="角色"
-        prop="role"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="地址"
-        prop="address"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="电话号码"
-        prop="phone"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="E-mail"
-        prop="email"
-      ></el-table-column>
+    <el-table :data="tableDAta" :height="tableHeight" @selection-change="handleSelectionChange" border element-loading-text="Loading" fit highlight-current-row v-loading.body="listLoading">
+      <el-table-column fixed="left" type="selection" width="30"></el-table-column>
+      <el-table-column align="center" fixed label="No" type="index" width="45"></el-table-column>
+      <el-table-column align="center" label="登录名称" prop="loginName"></el-table-column>
+      <el-table-column align="center" label="描述" prop="description"></el-table-column>
+      <el-table-column align="center" label="角色" prop="role"></el-table-column>
+      <el-table-column align="center" label="地址" prop="address"></el-table-column>
+      <el-table-column align="center" label="电话号码" prop="phone"></el-table-column>
+      <el-table-column align="center" label="E-mail" prop="email"></el-table-column>
       <el-table-column align="center" fixed="right" label="操作" width="300">
         <template slot-scope="scope">
           <el-button @click="handleUpdate(scope)" size="mini" type="primary">
@@ -101,35 +42,12 @@
     </el-table>
     <!-- 分页 -->
     <div class="common_pagination_wrapper">
-      <el-pagination
-        :current-page.sync="pagination.page"
-        :page-size="pagination.limit"
-        :page-sizes="[10, 20, 30, 50, 100]"
-        :total="total"
-        @current-change="handleCurrentChange"
-        @size-change="handleSizeChange"
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-      >
-      </el-pagination>
+      <el-pagination :current-page.sync="pagination.page" :page-size="pagination.limit" :page-sizes="[10, 20, 30, 50, 100]" :total="total" @current-change="handleCurrentChange" @size-change="handleSizeChange" background layout="total, sizes, prev, pager, next, jumper"> </el-pagination>
     </div>
     <!-- 编辑 -->
     <!-- 123 -->
-    <el-dialog
-      :title="textMap[dialogStatus]"
-      :visible.sync="dialogFormVisible"
-      top="5vh"
-      :close-on-click-modal="false"
-    >
-      <el-form
-        ref="formData"
-        :model="formData"
-        :rules="rules"
-        label-position="right"
-        label-width="80px"
-        :style="dialogHeight"
-        class="dialog_wrapper"
-      >
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" top="5vh" :close-on-click-modal="false">
+      <el-form ref="formData" :model="formData" :rules="rules" label-position="right" label-width="80px" :style="dialogHeight" class="dialog_wrapper">
         <el-row>
           <el-col :span="24">
             <el-form-item label="用户名称" prop="loginName">
@@ -155,13 +73,7 @@
           <el-col :span="12">
             <el-form-item label="角色" prop="role">
               <el-select v-model="formData.role" multiple>
-                <el-option
-                  v-for="(item, index) in roleList"
-                  :key="index"
-                  :value="item.code"
-                  :label="item.name"
-                >
-                </el-option>
+                <el-option v-for="(item, index) in roleList" :key="index" :value="item.code" :label="item.name"> </el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -190,11 +102,7 @@
       </el-form>
       <whiteSpace size="xl" />
       <div class="footer alignright">
-        <el-button
-          type="primary"
-          :disabled="submitingFlag"
-          @click="handleSubmit"
-        >
+        <el-button type="primary" :disabled="submitingFlag" @click="handleSubmit">
           保存
         </el-button>
         <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -265,16 +173,10 @@ export default {
         email: ''
       },
       rules: {
-        loginName: [
-          { required: true, message: '此项为必填项', trigger: 'change' }
-        ],
-        password: [
-          { required: true, message: '此项为必填项', trigger: 'change' }
-        ],
+        loginName: [{ required: true, message: '此项为必填项', trigger: 'change' }],
+        password: [{ required: true, message: '此项为必填项', trigger: 'change' }],
         role: [{ required: true, message: '此项为必填项', trigger: 'change' }],
-        description: [
-          { required: true, message: '此项为必填项', trigger: 'change' }
-        ]
+        description: [{ required: true, message: '此项为必填项', trigger: 'change' }]
       }
     };
   },
@@ -352,10 +254,7 @@ export default {
           this.submitingFlag = true;
           const params = {
             ...this.formData,
-            role:
-              this.formData.role instanceof Array
-                ? this.formData.role.join(',')
-                : this.formData.role
+            role: this.formData.role instanceof Array ? this.formData.role.join(',') : this.formData.role
           };
           this.$http
             .post(this.$baseUrl + this.createOrUpdateRequest, params)
@@ -378,10 +277,11 @@ export default {
     },
     handleUpdate(scope) {
       console.log(scope);
+      const role = scope.row.role || '';
       this.formData = {
         ...this.formData,
         ...scope.row,
-        role: scope.row.role.split(',')
+        role: role.split(',')
       };
       this.dialogStatus = 'update';
       this.dialogFormVisible = true;
@@ -453,9 +353,7 @@ export default {
         })
         .catch(error => {
           console.log(error);
-          this.$message.error(
-            `${error.response.status.toString()}  ${error.response.data.error}`
-          );
+          this.$message.error(`${error.response.status.toString()}  ${error.response.data.error}`);
         });
     },
 

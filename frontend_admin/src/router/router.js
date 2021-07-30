@@ -23,7 +23,14 @@ Vue.use(Router);
 export const constantRouterMap = [
   {
     path: '/login',
-    component: () => import('@/views/login/index'),
+    name: 'login',
+    component: () => import('@/views/Login'),
+    hidden: true
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('@/views/Register'),
     hidden: true
   },
   {
@@ -35,7 +42,7 @@ export const constantRouterMap = [
     path: '',
     component: Layout,
     redirect: '/dashboard',
-    name: 'Dashboard',
+    name: 'dashboard',
     hidden: false,
     children: [
       {
@@ -105,7 +112,7 @@ export const constantRouterMap = [
 ];
 
 export default new Router({
-  // mode: 'history', //后端支持可开
+  mode: 'history', //后端支持可开
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 });

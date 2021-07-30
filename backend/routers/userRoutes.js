@@ -5,8 +5,9 @@ const UserController = require('../controllers/UserController');
 
 router.post('/createOrUpdate', UserController.createOrUpdate);
 router.get('/getListByPagination', UserController.getListByPagination);
+router.delete('/deleteItems', UserController.deleteItems);
 router.get('/userInfo', UserController.userInfo);
-router.get('/login', UserController.login);
+router.post('/login', UserController.login);
 router.post('/register', UserController.register);
 router.post('/logout', UserController.logout);
 

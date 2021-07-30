@@ -39,7 +39,7 @@ const user = {
     // 获取用户信息
 
     // 登出
-    LogOut({ commit, state }) {
+    Logout({ commit, state }) {
       return new Promise((resolve, reject) => {
         const logoutRequest = baseUrl + 'user/logout';
 
@@ -68,7 +68,7 @@ const user = {
     },
 
     // 前端 登出
-    FedLogOut({ commit }) {
+    FedLogout({ commit }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '');
         resolve();

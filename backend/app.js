@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const csrf = require('csurf');
 const session = require('express-session');
@@ -29,16 +28,20 @@ const csrfProtection = csrf({
 app.use(
   session({
     secret: 'my secret',
-    reserve: false,
-    saveUninitialized: false
+    resave: true,
+    saveUninitialized: false, // 是否保存未初始化的会话
+    cookie: {
+      rolling: true,
+      maxAge: 1000 * 60 * 3 // 设置 session 的有效时间，单位毫秒
+    }
   })
 );
 
 app.use(express.static(__dirname));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.raw());
-app.use(bodyParser.text());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.raw());
+app.use(express.text());
 
 app.use((err, req, res, next) => {
   let { origin } = req.headers;

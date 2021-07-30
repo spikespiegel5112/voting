@@ -23,7 +23,7 @@ router.beforeEach((to, from, next) => {
   //           message: '获取信息失败',
   //           type: 'error'
   //         })
-  //         store.dispatch('FedLogOut').then(() => {
+  //         store.dispatch('FedLogout').then(() => {
   //           Message.error(err || 'Verification failed, please login again')
   //           next({ path: '/' })
   //         })*/

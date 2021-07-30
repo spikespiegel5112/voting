@@ -1,5 +1,5 @@
 {
-  "name": "antisony-crawler",
+  "name": "antisony-voting",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -20,28 +20,25 @@
     "btoa": "^1.2.1",
     "cheerio": "^1.0.0-rc.3",
     "cheerio-eq": "^1.0.1",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
-    "crawler": "^1.2.1",
+    "crypto": "^1.0.1",
     "csurf": "^1.10.0",
     "express": "^4.17.1",
-    "express-session": "^1.17.0",
+    "express-session": "^1.17.2",
     "fast-csv": "^3.4.0",
-    "font-cmap": "^1.0.1",
     "json2csv": "^4.5.1",
     "mysql2": "^1.6.5",
     "node-fetch": "^2.6.0",
     "object.observe": "^0.2.6",
-    "opentype": "^0.1.2",
-    "opentype.js": "^1.1.0",
+    "request": "^2.88.2",
     "sequelize": "^6.6.5",
     "sequelize-cli": "^5.4.0",
     "sequelize-to-json": "^0.10.3",
     "uuid": "^3.3.2",
-    "whacko": "^0.19.1",
-    "woff-parser": "^2.0.0",
-    "woff2-parser": "^1.0.0"
+    "whacko": "^0.19.1"
   },
   "devDependencies": {
-    "nodemon": "^1.19.1"
+    "nodemon": "^2.0.12"
   }
 }

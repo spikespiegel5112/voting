@@ -222,7 +222,6 @@ export default {
       this.voteDialogVisible = true;
       await this.getVotingOptions(scope);
       this.currentVotingList = this.votingOptionsList.map(item => 0);
-
       this.initChart();
     },
     getVotingOptions(scope) {
@@ -259,7 +258,7 @@ export default {
       });
       this.votingOptionsList = data;
     },
-    handleChooseVote(data, title, index, aaa) {
+    handleChooseVote(data, title, index) {
       const length = this.currentVotingList.length;
       if (typeof data === 'boolean') {
         if (data) {
